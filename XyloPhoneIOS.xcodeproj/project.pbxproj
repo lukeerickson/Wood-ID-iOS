@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F4AAAFF34AE39C3904D0B00 /* libPods-XyloPhoneIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF1053B6DAEF08FC7EE18218 /* libPods-XyloPhoneIOS.a */; };
+		605F28B926CDEAC900CAC0EC /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605F28B826CDEAC900CAC0EC /* CameraController.swift */; };
 		60705FDD26C9C27A00C821B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FDC26C9C27A00C821B3 /* AppDelegate.swift */; };
 		60705FDF26C9C27A00C821B3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FDE26C9C27A00C821B3 /* SceneDelegate.swift */; };
 		60705FE126C9C27A00C821B3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FE026C9C27A00C821B3 /* ViewController.swift */; };
@@ -16,6 +18,16 @@
 		60705FEC26C9C27B00C821B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60705FEA26C9C27B00C821B3 /* LaunchScreen.storyboard */; };
 		60705FF726C9C27B00C821B3 /* XyloPhoneIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FF626C9C27B00C821B3 /* XyloPhoneIOSTests.swift */; };
 		6070600226C9C27B00C821B3 /* XyloPhoneIOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070600126C9C27B00C821B3 /* XyloPhoneIOSUITests.swift */; };
+		6070602126C9CCCB00C821B3 /* ImagePredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070602026C9CCCB00C821B3 /* ImagePredictor.swift */; };
+		6070602626C9CD1200C821B3 /* Predictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070602526C9CD1200C821B3 /* Predictor.swift */; };
+		6070604226C9D11800C821B3 /* TorchModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6070603F26C9D11700C821B3 /* TorchModule.mm */; };
+		6070605D26C9EF7500C821B3 /* fips_wood_model_mobile.pt in Resources */ = {isa = PBXBuildFile; fileRef = 6070605926C9EF7500C821B3 /* fips_wood_model_mobile.pt */; };
+		6070605E26C9EF7500C821B3 /* species_database.json in Resources */ = {isa = PBXBuildFile; fileRef = 6070605A26C9EF7500C821B3 /* species_database.json */; };
+		6070605F26C9EF7500C821B3 /* labels.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6070605B26C9EF7500C821B3 /* labels.txt */; };
+		6070606026C9EF7500C821B3 /* phone_database.json in Resources */ = {isa = PBXBuildFile; fileRef = 6070605C26C9EF7500C821B3 /* phone_database.json */; };
+		6070606826C9F39E00C821B3 /* UIImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070606726C9F39E00C821B3 /* UIImageHelper.swift */; };
+		6070612726CA603A00C821B3 /* 009.png in Resources */ = {isa = PBXBuildFile; fileRef = 6070612626CA603A00C821B3 /* 009.png */; };
+		60CD6DDC26F1872E00573106 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +48,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		359EED8FAAD5BC9596C3739D /* Pods-XyloPhoneIOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XyloPhoneIOS.release.xcconfig"; path = "Target Support Files/Pods-XyloPhoneIOS/Pods-XyloPhoneIOS.release.xcconfig"; sourceTree = "<group>"; };
+		605F28B826CDEAC900CAC0EC /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		60705FD926C9C27A00C821B3 /* XyloPhoneIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XyloPhoneIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60705FDC26C9C27A00C821B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60705FDE26C9C27A00C821B3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -51,6 +65,20 @@
 		60705FFD26C9C27B00C821B3 /* XyloPhoneIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XyloPhoneIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6070600126C9C27B00C821B3 /* XyloPhoneIOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XyloPhoneIOSUITests.swift; sourceTree = "<group>"; };
 		6070600326C9C27B00C821B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6070602026C9CCCB00C821B3 /* ImagePredictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePredictor.swift; sourceTree = "<group>"; };
+		6070602526C9CD1200C821B3 /* Predictor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predictor.swift; sourceTree = "<group>"; };
+		6070603F26C9D11700C821B3 /* TorchModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TorchModule.mm; sourceTree = "<group>"; };
+		6070604026C9D11700C821B3 /* PyTorchDemo-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PyTorchDemo-Bridging-Header.h"; sourceTree = "<group>"; };
+		6070604126C9D11700C821B3 /* TorchModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TorchModule.h; sourceTree = "<group>"; };
+		6070605926C9EF7500C821B3 /* fips_wood_model_mobile.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = fips_wood_model_mobile.pt; sourceTree = "<group>"; };
+		6070605A26C9EF7500C821B3 /* species_database.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = species_database.json; sourceTree = "<group>"; };
+		6070605B26C9EF7500C821B3 /* labels.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labels.txt; sourceTree = "<group>"; };
+		6070605C26C9EF7500C821B3 /* phone_database.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = phone_database.json; sourceTree = "<group>"; };
+		6070606726C9F39E00C821B3 /* UIImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageHelper.swift; sourceTree = "<group>"; };
+		6070612626CA603A00C821B3 /* 009.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 009.png; sourceTree = "<group>"; };
+		60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		B2DEC556A23CBD92ECDCCD2F /* Pods-XyloPhoneIOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XyloPhoneIOS.debug.xcconfig"; path = "Target Support Files/Pods-XyloPhoneIOS/Pods-XyloPhoneIOS.debug.xcconfig"; sourceTree = "<group>"; };
+		CF1053B6DAEF08FC7EE18218 /* libPods-XyloPhoneIOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-XyloPhoneIOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F4AAAFF34AE39C3904D0B00 /* libPods-XyloPhoneIOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +107,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0A52D67962519E383D82F730 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B2DEC556A23CBD92ECDCCD2F /* Pods-XyloPhoneIOS.debug.xcconfig */,
+				359EED8FAAD5BC9596C3739D /* Pods-XyloPhoneIOS.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		605F28B726CDEA8500CAC0EC /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				60705FE026C9C27A00C821B3 /* ViewController.swift */,
+				605F28B826CDEAC900CAC0EC /* CameraController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		60705FD026C9C27A00C821B3 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +132,8 @@
 				60705FF526C9C27B00C821B3 /* XyloPhoneIOSTests */,
 				6070600026C9C27B00C821B3 /* XyloPhoneIOSUITests */,
 				60705FDA26C9C27A00C821B3 /* Products */,
+				0A52D67962519E383D82F730 /* Pods */,
+				6086674117F2C28EB6BCA482 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,14 +150,20 @@
 		60705FDB26C9C27A00C821B3 /* XyloPhoneIOS */ = {
 			isa = PBXGroup;
 			children = (
+				60CD6DDA26F1871400573106 /* view */,
+				605F28B726CDEA8500CAC0EC /* Controller */,
+				6070605826C9EF7500C821B3 /* model */,
+				6070604626C9D12200C821B3 /* TorchBridge */,
 				60705FDC26C9C27A00C821B3 /* AppDelegate.swift */,
 				60705FDE26C9C27A00C821B3 /* SceneDelegate.swift */,
-				60705FE026C9C27A00C821B3 /* ViewController.swift */,
 				60705FE226C9C27A00C821B3 /* Main.storyboard */,
 				60705FE826C9C27B00C821B3 /* Assets.xcassets */,
 				60705FEA26C9C27B00C821B3 /* LaunchScreen.storyboard */,
 				60705FED26C9C27B00C821B3 /* Info.plist */,
 				60705FE526C9C27A00C821B3 /* XyloPhoneIOS.xcdatamodeld */,
+				6070602026C9CCCB00C821B3 /* ImagePredictor.swift */,
+				6070602526C9CD1200C821B3 /* Predictor.swift */,
+				6070606726C9F39E00C821B3 /* UIImageHelper.swift */,
 			);
 			path = XyloPhoneIOS;
 			sourceTree = "<group>";
@@ -131,6 +186,44 @@
 			path = XyloPhoneIOSUITests;
 			sourceTree = "<group>";
 		};
+		6070604626C9D12200C821B3 /* TorchBridge */ = {
+			isa = PBXGroup;
+			children = (
+				6070604026C9D11700C821B3 /* PyTorchDemo-Bridging-Header.h */,
+				6070604126C9D11700C821B3 /* TorchModule.h */,
+				6070603F26C9D11700C821B3 /* TorchModule.mm */,
+			);
+			path = TorchBridge;
+			sourceTree = "<group>";
+		};
+		6070605826C9EF7500C821B3 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				6070612626CA603A00C821B3 /* 009.png */,
+				6070605926C9EF7500C821B3 /* fips_wood_model_mobile.pt */,
+				6070605A26C9EF7500C821B3 /* species_database.json */,
+				6070605B26C9EF7500C821B3 /* labels.txt */,
+				6070605C26C9EF7500C821B3 /* phone_database.json */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		6086674117F2C28EB6BCA482 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CF1053B6DAEF08FC7EE18218 /* libPods-XyloPhoneIOS.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		60CD6DDA26F1871400573106 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -138,6 +231,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6070600626C9C27B00C821B3 /* Build configuration list for PBXNativeTarget "XyloPhoneIOS" */;
 			buildPhases = (
+				7A8A825E614ADF082DB703E5 /* [CP] Check Pods Manifest.lock */,
 				60705FD526C9C27A00C821B3 /* Sources */,
 				60705FD626C9C27A00C821B3 /* Frameworks */,
 				60705FD726C9C27A00C821B3 /* Resources */,
@@ -234,8 +328,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6070605E26C9EF7500C821B3 /* species_database.json in Resources */,
 				60705FEC26C9C27B00C821B3 /* LaunchScreen.storyboard in Resources */,
+				6070606026C9EF7500C821B3 /* phone_database.json in Resources */,
+				6070612726CA603A00C821B3 /* 009.png in Resources */,
+				6070605D26C9EF7500C821B3 /* fips_wood_model_mobile.pt in Resources */,
 				60705FE926C9C27B00C821B3 /* Assets.xcassets in Resources */,
+				6070605F26C9EF7500C821B3 /* labels.txt in Resources */,
 				60705FE426C9C27A00C821B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,15 +355,46 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		7A8A825E614ADF082DB703E5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-XyloPhoneIOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		60705FD526C9C27A00C821B3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				605F28B926CDEAC900CAC0EC /* CameraController.swift in Sources */,
+				6070604226C9D11800C821B3 /* TorchModule.mm in Sources */,
+				60CD6DDC26F1872E00573106 /* CameraPreviewView.swift in Sources */,
 				60705FE126C9C27A00C821B3 /* ViewController.swift in Sources */,
 				60705FDD26C9C27A00C821B3 /* AppDelegate.swift in Sources */,
 				60705FE726C9C27A00C821B3 /* XyloPhoneIOS.xcdatamodeld in Sources */,
 				60705FDF26C9C27A00C821B3 /* SceneDelegate.swift in Sources */,
+				6070602626C9CD1200C821B3 /* Predictor.swift in Sources */,
+				6070602126C9CCCB00C821B3 /* ImagePredictor.swift in Sources */,
+				6070606826C9F39E00C821B3 /* UIImageHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,11 +567,13 @@
 		};
 		6070600726C9C27B00C821B3 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B2DEC556A23CBD92ECDCCD2F /* Pods-XyloPhoneIOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C9CGD946DH;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = XyloPhoneIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -449,6 +581,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dayosoft.XyloPhoneIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "XyloPhoneIOS/TorchBridge/PyTorchDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -456,11 +589,13 @@
 		};
 		6070600826C9C27B00C821B3 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 359EED8FAAD5BC9596C3739D /* Pods-XyloPhoneIOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = C9CGD946DH;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = XyloPhoneIOS/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -468,6 +603,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dayosoft.XyloPhoneIOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "XyloPhoneIOS/TorchBridge/PyTorchDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
