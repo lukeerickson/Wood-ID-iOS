@@ -39,4 +39,8 @@ class ImagePredictor: Predictor {
         let results = topK(scores: outputs, labels: labels, count: resultCount)
         return (results, inferenceTime)
     }
+    
+    func classLabels() -> ([String]) {
+        return labels
+    }
 }
