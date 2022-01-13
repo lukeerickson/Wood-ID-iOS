@@ -12,6 +12,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     private let photoOutput = AVCapturePhotoOutput()
     private let videoOutput = AVCaptureVideoDataOutput()
     private let ciContext = CIContext()
+    private let userDefaults = UserDefaults()
     weak open var delegate: (CameraControllerDelegate)?
     @IBOutlet weak var CaptureButton: UIButton!
     @IBOutlet weak var zoomSlider: UISlider!
@@ -46,6 +47,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     
     @IBAction func zoomChanged(_ sender: UISlider) {
         self.currentCrop = (1 - sender.value) * (3024.0 - 512.0) + 512.0
+        self.userDefaults.set(self.currentCrop, forKey: "current_crop")
         NSLog("value set to \(self.currentCrop)")
     }
     
@@ -102,7 +104,15 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let savedCrop = max(512.0, userDefaults.float(forKey: "current_crop"))
+        NSLog("saved crop = \(savedCrop)")
+        self.currentCrop = savedCrop
+        zoomSlider.value = 1 - (currentCrop - 512.0) / (3024.0 - 512.0)
         // Do any additional setup after loading the view
+    }
+    
+    @IBAction func cancelCapture(_ sender: Any) {
+        self.dismiss(animated: true)
     }
     
     override func viewDidAppear(_ animated: Bool) {
