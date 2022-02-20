@@ -7,6 +7,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 public protocol CameraControllerDelegate : NSObjectProtocol {
     func didCaptureImage(photoOutput: Data?, cropSize: Float)

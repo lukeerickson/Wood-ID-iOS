@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 import Photos
+import CoreData
 
 public protocol ImagePickerDelegate: class {
     func didSelect(image: UIImage?)
@@ -75,7 +76,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
         NSLog("imagePath \(imagePath)")
         if let pngData = image.pngData() {
-            process(photoOutput: pngData, cropSize: 0.0)
+            process(photoOutput: pngData, cropSize: min(Float(image.size.height), Float(image.size.width)))
         }
         
         dismiss(animated: true, completion: nil)
@@ -95,60 +96,88 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             print("No photo data resource")
             return
         }
-        process(photoOutput: photoData, cropSize: cropSize)
+        if let data = process(photoOutput: photoData, cropSize: cropSize) {
+            PHPhotoLibrary.requestAuthorization { status in
+                if status == .authorized {
+//                    PHPhotoLibrary.shared().performChanges({
+//                        let options = PHAssetResourceCreationOptions()
+//                        let creationRequest = PHAssetCreationRequest.forAsset()
+//                        creationRequest.addResource(with: .photo, data: data.jpegData(compressionQuality: 100)!, options: options)
+//                    }, completionHandler: { _, error in
+//                        if let error = error {
+//                            print("Error occurred while saving photo to photo library: \(error)")
+//                        }
+//                    })
+                } else {
+                    NSLog("not authorized!")
+                }
+            }
+        }
     }
     
-    private func process(photoOutput: Data, cropSize: Float) {
-        let image = UIImage.init(data: photoOutput)!
-        NSLog("Dimensions width: \(image.size.width) height: \(image.size.height)")
+    private func preprocessImage(photoOutput: Data?, cropSize: Float) -> UIImage {
+            let image = UIImage.init(data: photoOutput!)!
+            NSLog("Dimensions width: \(image.size.width) height: \(image.size.height)")
+            
+            let newCropWidth = CGFloat(cropSize);
+            let newCropHeight = CGFloat(cropSize);
+            NSLog("Square size: \(cropSize)")
+            let x = image.size.width / 2.0 - newCropWidth/2.0;
+            let y = image.size.height / 2.0 - newCropHeight/2.0;
+            let cropRect = CGRect(x: y, y: x, width: newCropWidth, height: newCropHeight);
+            let imageRef = image.cgImage!.cropping(to: cropRect)
+            return UIImage.init(cgImage: imageRef!, scale: 1.0, orientation: .right)
+    }
+    
+    private func process(photoOutput: Data?, cropSize: Float) -> UIImage? {
+        let resizedImage = preprocessImage(photoOutput: photoOutput, cropSize: cropSize).resized(to: CGSize(width: 512, height: 512))
         
-        let newCropWidth = CGFloat(cropSize);
-        let newCropHeight = CGFloat(cropSize);
-        NSLog("Square size: \(cropSize)")
-        let x = image.size.width / 2.0 - newCropWidth/2.0;
-        let y = image.size.height / 2.0 - newCropHeight/2.0;
-        let cropRect = CGRect(x: y, y: x, width: newCropWidth, height: newCropHeight);
-        let imageRef = image.cgImage!.cropping(to: cropRect)
-        let croppedImage = UIImage.init(cgImage: imageRef!, scale: 1.0, orientation: .right)
-        
-        PHPhotoLibrary.requestAuthorization { status in
-            if status == .authorized {
-                PHPhotoLibrary.shared().performChanges({
-                    let options = PHAssetResourceCreationOptions()
-                    let creationRequest = PHAssetCreationRequest.forAsset()
-                    NSLog("saved image dimenstion \(croppedImage.size.width) x \(croppedImage.size.height)")
-                    creationRequest.addResource(with: .photo, data: croppedImage.jpegData(compressionQuality: 100.0)!, options: options)
-                }, completionHandler: { _, error in
-                    if let error = error {
-                        print("Error occurred while saving photo to photo library: \(error)")
-                    }
-                }
-                )
-            } else {
-                NSLog("not authorized!")
-            }
-        }
-        
-        let resizedImage = croppedImage.resized(to: CGSize(width: 512, height: 512))
-
         testImage.image = resizedImage
-        
+
         guard let pixelBuffer = resizedImage.normalized() else {
-            return
+            return nil
         }
         let module = ImagePredictor()
-        
-        if let outputs = try? module.predict(pixelBuffer, resultCount: module.classLabels().count) {
+        let labels = module.classLabels()
+        NSLog("Starting Inference \(labels.count)")
+        if let outputs = try? module.predict(pixelBuffer, resultCount: labels.count) {
             NSLog("Inference done")
-            for m in outputs.0 {
-                NSLog("\(m.label) -> \(m.score)")
-            }
             let result = outputs.0.first!
+//            saveInferenceLog(className: result.label)
             identificationlabel.text = "\(result.label) = \(result.score)"
+            return resizedImage
         } else {
-            return
+            return nil
         }
-        NSLog("Image Captured!")
+
     }
+    
+//    func loadInferenceLogs() -> [InferenceLogEntity] {
+//        let mainContext = CoreDataManager.shared.mainContext
+//        let fetchRequest: NSFetchRequest<InferenceLogEntity> = InferenceLogEntity.fetchRequest()
+//        do {
+//            let results = try mainContext.fetch(fetchRequest)
+//            return results
+//        }
+//        catch {
+//            debugPrint(error)
+//        }
+//        return []
+//    }
+//
+//    func saveInferenceLog(className: String) {
+//        let context = CoreDataManager.shared.backgroundContext()
+//        context.perform {
+//            NSLog("Saving inference log")
+//            let entity = InferenceLogEntity.entity()
+//            let inferenceLog = InferenceLogEntity(entity: entity, insertInto: context)
+//            inferenceLog.class_name = className
+//            do {
+//                try context.save()
+//            } catch {
+//                debugPrint(error)
+//            }
+//        }
+//    }
 }
 

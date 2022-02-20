@@ -1,9 +1,3 @@
-//
-//  CameraController.swift
-//  XyloPhoneIOS
-//
-//  Created by joseph Emmanuel Dayo on 8/19/21.
-//
 import UIKit
 import AVFoundation
 
@@ -78,14 +72,13 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                         self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = nil
                         DispatchQueue.main.async {
                             NSLog("photo capture done!")
-                            
                             self.delegate?.didCaptureImage(photoOutput: data!, cropSize: self.currentCrop)
                             self.dismiss(animated: true)
                         }
                     }
 
             }, photoProcessingHandler:  { _ in })
-           
+            
     
             self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = photoCaptureProcessor
             self.photoOutput.capturePhoto(with: photoSettings, delegate: photoCaptureProcessor)
@@ -100,15 +93,27 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     }
     
     // Communicate with the session and other session objects on this queue.
-    private let sessionQueue = DispatchQueue(label: "session queue")
+    private let sessionQueue = DispatchQueue(label: "session queue as! Data")
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let savedCrop = max(512.0, userDefaults.float(forKey: "current_crop"))
+        var savedCrop: Float32 = 735.0
+        if (userDefaults.object(forKey: "current_crop") != nil) {
+            savedCrop = max(512.0, userDefaults.float(forKey: "current_crop"))
+        }
+
         NSLog("saved crop = \(savedCrop)")
         self.currentCrop = savedCrop
         zoomSlider.value = 1 - (currentCrop - 512.0) / (3024.0 - 512.0)
         // Do any additional setup after loading the view
+        AppUtility.lockOrientation(.portrait)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Don't forget to reset when view is being removed
+        AppUtility.lockOrientation(.all)
     }
     
     @IBAction func cancelCapture(_ sender: Any) {
@@ -181,10 +186,45 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
 
                     if videoDevice.isWhiteBalanceModeSupported(.locked) {
                         NSLog("device type \(UIDevice().type)")
-                        let whiteBalanceGain = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(temperature: 5700.0, tint: 0.0)
-                            videoDevice.setWhiteBalanceModeLocked(with: videoDevice.deviceWhiteBalanceGains(for: whiteBalanceGain), completionHandler: { _ in
-                                NSLog("White balance locked")
-                            })
+                        var colorTemperature = Float(8700.0)
+                        
+                        if (userDefaults.object(forKey: "color_temperature") != nil) {
+                            colorTemperature = max(512.0, userDefaults.float(forKey: "color_temperature"))
+                        }
+                        
+                        var gain = AVCaptureDevice.WhiteBalanceGains(redGain: 1.0, greenGain: 1.0, blueGain: 1.0)
+                        
+                        if (userDefaults.bool(forKey: "custom_gain")) {
+                            let redGain = userDefaults.float(forKey: "red_gain")
+                            let greenGain = userDefaults.float(forKey: "green_gain")
+                            let blueGain = userDefaults.float(forKey: "blue_gain")
+                            gain = AVCaptureDevice.WhiteBalanceGains(redGain: redGain, greenGain: greenGain, blueGain: blueGain)
+                        } else {
+                            let whiteBalanceGain = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(temperature: colorTemperature, tint: 0.0)
+                            gain = videoDevice.deviceWhiteBalanceGains(for: whiteBalanceGain)
+                        }
+                        
+                        videoDevice.setWhiteBalanceModeLocked(with: gain, completionHandler: { _ in
+                            NSLog("White balance locked \(colorTemperature)")
+                        })
+                    }
+                    
+                    if videoDevice.isExposureModeSupported(AVCaptureDevice.ExposureMode.custom) {
+                        var duration = 1;
+                        var iso = 200;
+                        
+                        if (userDefaults.object(forKey: "exposure_duration") != nil) {
+                            duration = userDefaults.integer(forKey: "exposure_duration")
+                        }
+                        
+                        if (userDefaults.object(forKey: "iso") != nil) {
+                            iso = userDefaults.integer(forKey: "iso")
+                        }
+                        
+                        videoDevice.setExposureModeCustom(duration: CMTime.init(value: CMTimeValue(duration), timescale: 1000), iso: Float(iso),
+                                                          completionHandler: { _ in
+                            NSLog("Exposure locked \(duration) ms")
+                        })
                     }
                 } catch {
                     NSLog("Unable to lock device")
@@ -224,8 +264,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         session.commitConfiguration()
 
         session.startRunning()
-        
-
+            
         } catch {
             print("Couldn't create video device input: \(error)")
             session.commitConfiguration()

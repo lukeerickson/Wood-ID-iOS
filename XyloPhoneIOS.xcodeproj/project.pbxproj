@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		2F4AAAFF34AE39C3904D0B00 /* libPods-XyloPhoneIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF1053B6DAEF08FC7EE18218 /* libPods-XyloPhoneIOS.a */; };
+		6046C082279400C2000BF5CC /* species_database.json in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07D279400C2000BF5CC /* species_database.json */; };
+		6046C08F27952F4E000BF5CC /* model.json in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07A279400C2000BF5CC /* model.json */; };
+		6046C09027952F4E000BF5CC /* model.pt in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07B279400C2000BF5CC /* model.pt */; };
+		6046C09127952F4E000BF5CC /* model.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07C279400C2000BF5CC /* model.txt */; };
+		6046C09227952F4E000BF5CC /* labels.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07E279400C2000BF5CC /* labels.txt */; };
 		605F28B926CDEAC900CAC0EC /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605F28B826CDEAC900CAC0EC /* CameraController.swift */; };
 		60705FDD26C9C27A00C821B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FDC26C9C27A00C821B3 /* AppDelegate.swift */; };
 		60705FDF26C9C27A00C821B3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FDE26C9C27A00C821B3 /* SceneDelegate.swift */; };
@@ -21,17 +26,16 @@
 		6070602126C9CCCB00C821B3 /* ImagePredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070602026C9CCCB00C821B3 /* ImagePredictor.swift */; };
 		6070602626C9CD1200C821B3 /* Predictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070602526C9CD1200C821B3 /* Predictor.swift */; };
 		6070604226C9D11800C821B3 /* TorchModule.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6070603F26C9D11700C821B3 /* TorchModule.mm */; };
-		6070605D26C9EF7500C821B3 /* fips_wood_model_mobile.pt in Resources */ = {isa = PBXBuildFile; fileRef = 6070605926C9EF7500C821B3 /* fips_wood_model_mobile.pt */; };
-		6070605E26C9EF7500C821B3 /* species_database.json in Resources */ = {isa = PBXBuildFile; fileRef = 6070605A26C9EF7500C821B3 /* species_database.json */; };
-		6070605F26C9EF7500C821B3 /* labels.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6070605B26C9EF7500C821B3 /* labels.txt */; };
-		6070606026C9EF7500C821B3 /* phone_database.json in Resources */ = {isa = PBXBuildFile; fileRef = 6070605C26C9EF7500C821B3 /* phone_database.json */; };
 		6070606826C9F39E00C821B3 /* UIImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070606726C9F39E00C821B3 /* UIImageHelper.swift */; };
-		6070612726CA603A00C821B3 /* 009.png in Resources */ = {isa = PBXBuildFile; fileRef = 6070612626CA603A00C821B3 /* 009.png */; };
+		6070FD9127917C6A00C923B0 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6070FD9027917C6A00C923B0 /* CoreDataManager.swift */; };
+		6070FD9727917C7700C923B0 /* XyloPhoneIOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6070FD9527917C7700C923B0 /* XyloPhoneIOS.xcdatamodeld */; };
 		60A5B5012782D7B900EBEE7A /* DeviceModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A5B5002782D7B900EBEE7A /* DeviceModel.swift */; };
 		60A5B514278595B700EBEE7A /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = 60A5B513278595B700EBEE7A /* Cartfile */; };
 		60A7318526FCB2150096F840 /* PhotoCaptureProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A7318426FCB2150096F840 /* PhotoCaptureProcessor.swift */; };
 		60B0A6A227672A2D00486DA1 /* CameraControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B0A6A127672A2D00486DA1 /* CameraControllerDelegate.swift */; };
+		60B9C74E27AD38B9009D27EF /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B9C74D27AD38B9009D27EF /* SettingsController.swift */; };
 		60CD6DDC26F1872E00573106 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */; };
+		60D45AD727A9428100D69295 /* AppUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D45AD627A9428100D69295 /* AppUtil.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,11 @@
 
 /* Begin PBXFileReference section */
 		359EED8FAAD5BC9596C3739D /* Pods-XyloPhoneIOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XyloPhoneIOS.release.xcconfig"; path = "Target Support Files/Pods-XyloPhoneIOS/Pods-XyloPhoneIOS.release.xcconfig"; sourceTree = "<group>"; };
+		6046C07A279400C2000BF5CC /* model.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = model.json; sourceTree = "<group>"; };
+		6046C07B279400C2000BF5CC /* model.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = model.pt; sourceTree = "<group>"; };
+		6046C07C279400C2000BF5CC /* model.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = model.txt; sourceTree = "<group>"; };
+		6046C07D279400C2000BF5CC /* species_database.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = species_database.json; sourceTree = "<group>"; };
+		6046C07E279400C2000BF5CC /* labels.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labels.txt; sourceTree = "<group>"; };
 		605F28B826CDEAC900CAC0EC /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		60705FD926C9C27A00C821B3 /* XyloPhoneIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XyloPhoneIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60705FDC26C9C27A00C821B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,18 +83,17 @@
 		6070603F26C9D11700C821B3 /* TorchModule.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TorchModule.mm; sourceTree = "<group>"; };
 		6070604026C9D11700C821B3 /* PyTorchDemo-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PyTorchDemo-Bridging-Header.h"; sourceTree = "<group>"; };
 		6070604126C9D11700C821B3 /* TorchModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TorchModule.h; sourceTree = "<group>"; };
-		6070605926C9EF7500C821B3 /* fips_wood_model_mobile.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = fips_wood_model_mobile.pt; sourceTree = "<group>"; };
-		6070605A26C9EF7500C821B3 /* species_database.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = species_database.json; sourceTree = "<group>"; };
-		6070605B26C9EF7500C821B3 /* labels.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labels.txt; sourceTree = "<group>"; };
-		6070605C26C9EF7500C821B3 /* phone_database.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = phone_database.json; sourceTree = "<group>"; };
 		6070606726C9F39E00C821B3 /* UIImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageHelper.swift; sourceTree = "<group>"; };
-		6070612626CA603A00C821B3 /* 009.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 009.png; sourceTree = "<group>"; };
+		6070FD9027917C6A00C923B0 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		6070FD9627917C7700C923B0 /* XyloPhoneIOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = XyloPhoneIOS.xcdatamodel; sourceTree = "<group>"; };
 		60A5B5002782D7B900EBEE7A /* DeviceModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceModel.swift; sourceTree = "<group>"; };
 		60A5B5122785954A00EBEE7A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		60A5B513278595B700EBEE7A /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		60A7318426FCB2150096F840 /* PhotoCaptureProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCaptureProcessor.swift; sourceTree = "<group>"; };
 		60B0A6A127672A2D00486DA1 /* CameraControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraControllerDelegate.swift; sourceTree = "<group>"; };
+		60B9C74D27AD38B9009D27EF /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
+		60D45AD627A9428100D69295 /* AppUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtil.swift; sourceTree = "<group>"; };
 		B2DEC556A23CBD92ECDCCD2F /* Pods-XyloPhoneIOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XyloPhoneIOS.debug.xcconfig"; path = "Target Support Files/Pods-XyloPhoneIOS/Pods-XyloPhoneIOS.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1053B6DAEF08FC7EE18218 /* libPods-XyloPhoneIOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-XyloPhoneIOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -125,12 +133,26 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		6046C079279400C2000BF5CC /* model */ = {
+			isa = PBXGroup;
+			children = (
+				6046C07A279400C2000BF5CC /* model.json */,
+				6046C07B279400C2000BF5CC /* model.pt */,
+				6046C07C279400C2000BF5CC /* model.txt */,
+				6046C07D279400C2000BF5CC /* species_database.json */,
+				6046C07E279400C2000BF5CC /* labels.txt */,
+			);
+			name = model;
+			path = XyloPhoneIOS/model;
+			sourceTree = "<group>";
+		};
 		605F28B726CDEA8500CAC0EC /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				60705FE026C9C27A00C821B3 /* ViewController.swift */,
 				605F28B826CDEAC900CAC0EC /* CameraController.swift */,
 				60B0A6A127672A2D00486DA1 /* CameraControllerDelegate.swift */,
+				60B9C74D27AD38B9009D27EF /* SettingsController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -138,6 +160,7 @@
 		60705FD026C9C27A00C821B3 = {
 			isa = PBXGroup;
 			children = (
+				6046C079279400C2000BF5CC /* model */,
 				60A5B513278595B700EBEE7A /* Cartfile */,
 				60A5B5122785954A00EBEE7A /* README.md */,
 				60705FDB26C9C27A00C821B3 /* XyloPhoneIOS */,
@@ -162,9 +185,11 @@
 		60705FDB26C9C27A00C821B3 /* XyloPhoneIOS */ = {
 			isa = PBXGroup;
 			children = (
+				60D45AD527A9426A00D69295 /* Util */,
+				6070FD9527917C7700C923B0 /* XyloPhoneIOS.xcdatamodeld */,
+				6070FD9027917C6A00C923B0 /* CoreDataManager.swift */,
 				60CD6DDA26F1871400573106 /* view */,
 				605F28B726CDEA8500CAC0EC /* Controller */,
-				6070605826C9EF7500C821B3 /* model */,
 				6070604626C9D12200C821B3 /* TorchBridge */,
 				60705FDC26C9C27A00C821B3 /* AppDelegate.swift */,
 				60705FDE26C9C27A00C821B3 /* SceneDelegate.swift */,
@@ -210,18 +235,6 @@
 			path = TorchBridge;
 			sourceTree = "<group>";
 		};
-		6070605826C9EF7500C821B3 /* model */ = {
-			isa = PBXGroup;
-			children = (
-				6070612626CA603A00C821B3 /* 009.png */,
-				6070605926C9EF7500C821B3 /* fips_wood_model_mobile.pt */,
-				6070605A26C9EF7500C821B3 /* species_database.json */,
-				6070605B26C9EF7500C821B3 /* labels.txt */,
-				6070605C26C9EF7500C821B3 /* phone_database.json */,
-			);
-			path = model;
-			sourceTree = "<group>";
-		};
 		6086674117F2C28EB6BCA482 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -236,6 +249,14 @@
 				60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		60D45AD527A9426A00D69295 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				60D45AD627A9428100D69295 /* AppUtil.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,14 +363,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6046C08F27952F4E000BF5CC /* model.json in Resources */,
+				6046C09027952F4E000BF5CC /* model.pt in Resources */,
+				6046C09127952F4E000BF5CC /* model.txt in Resources */,
+				6046C09227952F4E000BF5CC /* labels.txt in Resources */,
 				60A5B514278595B700EBEE7A /* Cartfile in Resources */,
-				6070605E26C9EF7500C821B3 /* species_database.json in Resources */,
 				60705FEC26C9C27B00C821B3 /* LaunchScreen.storyboard in Resources */,
-				6070606026C9EF7500C821B3 /* phone_database.json in Resources */,
-				6070612726CA603A00C821B3 /* 009.png in Resources */,
-				6070605D26C9EF7500C821B3 /* fips_wood_model_mobile.pt in Resources */,
 				60705FE926C9C27B00C821B3 /* Assets.xcassets in Resources */,
-				6070605F26C9EF7500C821B3 /* labels.txt in Resources */,
+				6046C082279400C2000BF5CC /* species_database.json in Resources */,
 				60705FE426C9C27A00C821B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -403,15 +424,19 @@
 				605F28B926CDEAC900CAC0EC /* CameraController.swift in Sources */,
 				60A5B5012782D7B900EBEE7A /* DeviceModel.swift in Sources */,
 				6070604226C9D11800C821B3 /* TorchModule.mm in Sources */,
+				60B9C74E27AD38B9009D27EF /* SettingsController.swift in Sources */,
 				60CD6DDC26F1872E00573106 /* CameraPreviewView.swift in Sources */,
 				60705FE126C9C27A00C821B3 /* ViewController.swift in Sources */,
 				60705FDD26C9C27A00C821B3 /* AppDelegate.swift in Sources */,
 				60705FE726C9C27A00C821B3 /* XyloPhoneIOS.xcdatamodeld in Sources */,
+				60D45AD727A9428100D69295 /* AppUtil.swift in Sources */,
+				6070FD9727917C7700C923B0 /* XyloPhoneIOS.xcdatamodeld in Sources */,
 				60A7318526FCB2150096F840 /* PhotoCaptureProcessor.swift in Sources */,
 				60705FDF26C9C27A00C821B3 /* SceneDelegate.swift in Sources */,
 				6070602626C9CD1200C821B3 /* Predictor.swift in Sources */,
 				60B0A6A227672A2D00486DA1 /* CameraControllerDelegate.swift in Sources */,
 				6070602126C9CCCB00C821B3 /* ImagePredictor.swift in Sources */,
+				6070FD9127917C6A00C923B0 /* CoreDataManager.swift in Sources */,
 				6070606826C9F39E00C821B3 /* UIImageHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -759,6 +784,16 @@
 				60705FE626C9C27A00C821B3 /* XyloPhoneIOS.xcdatamodel */,
 			);
 			currentVersion = 60705FE626C9C27A00C821B3 /* XyloPhoneIOS.xcdatamodel */;
+			path = XyloPhoneIOS.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+		6070FD9527917C7700C923B0 /* XyloPhoneIOS.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				6070FD9627917C7700C923B0 /* XyloPhoneIOS.xcdatamodel */,
+			);
+			currentVersion = 6070FD9627917C7700C923B0 /* XyloPhoneIOS.xcdatamodel */;
 			path = XyloPhoneIOS.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

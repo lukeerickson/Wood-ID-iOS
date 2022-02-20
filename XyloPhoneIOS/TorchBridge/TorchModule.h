@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface VisionTorchModule : TorchModule
-- (nullable NSArray<NSNumber*>*)predictImage:(void*)imageBuffer NS_SWIFT_NAME(predict(image:));
+- (nullable NSArray<NSNumber*>*)predictImage:(void*)imageBuffer size:(int)outputSize NS_SWIFT_NAME(predict(image:,size:));
 @end
 
 @interface NLPTorchModule : TorchModule

@@ -1,12 +1,31 @@
-Albizia
-Detarium
-Dialium
-Hymenaea
-Inga
-Morus
-Nauclea
-Robinia
-Swietenia
-Tectona
-Ulmus_americana
-Ulmus_rubra
+Endospermum peltatum
+acacia auriculiformis
+acacia mangium
+acer saccharum
+dipterocarpus grandiflorus
+eucalyptus camaldulensis
+falcataria falcata
+fraxinus americana
+gmelina arborea
+hevea brasiliensis
+instia bijuga
+juglans nigra
+juglans regia
+leucaena leucocephala
+palosapis
+parashorea malaanonan
+pometia pinnata
+pterocarpus indicus
+quercus robur
+samanea saman
+shorea albida
+shorea astylosa
+shorea contorta
+shorea negrosensis
+shorea ovata
+shorea palosapis
+shorea parvifolia
+shorea polysperma
+swietenia macrophylla
+tectona grandis
+vitex parviflora

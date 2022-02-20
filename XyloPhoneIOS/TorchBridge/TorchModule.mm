@@ -28,7 +28,7 @@
 
 @implementation VisionTorchModule
 
-- (NSArray<NSNumber*>*)predictImage:(void*)imageBuffer {
+- (NSArray<NSNumber*>*)predictImage:(void*)imageBuffer size:(int)outputSize {
   try {
     at::Tensor tensor = torch::from_blob(imageBuffer, {1, 3, 512, 512}, at::kFloat);
     torch::autograd::AutoGradMode guard(false);
@@ -39,7 +39,7 @@
       return nil;
     }
     NSMutableArray* results = [[NSMutableArray alloc] init];
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < outputSize; i++) {
       [results addObject:@(floatBuffer[i])];
     }
     return [results copy];
