@@ -14,6 +14,18 @@ public protocol ImagePickerDelegate: class {
     func didSelect(image: UIImage?)
 }
 
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+}
+
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraControllerDelegate {
     @IBOutlet weak var identificationlabel: UILabel!
     @IBOutlet weak var testImage: UIImageView!
@@ -143,7 +155,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let outputs = try? module.predict(pixelBuffer, resultCount: labels.count) {
             NSLog("Inference done")
             let result = outputs.0.first!
-//            saveInferenceLog(className: result.label)
+            saveInferenceLog(className: result.label)
             identificationlabel.text = "\(result.label) = \(result.score)"
             return resizedImage
         } else {
@@ -152,32 +164,32 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     }
     
-//    func loadInferenceLogs() -> [InferenceLogEntity] {
-//        let mainContext = CoreDataManager.shared.mainContext
-//        let fetchRequest: NSFetchRequest<InferenceLogEntity> = InferenceLogEntity.fetchRequest()
-//        do {
-//            let results = try mainContext.fetch(fetchRequest)
-//            return results
-//        }
-//        catch {
-//            debugPrint(error)
-//        }
-//        return []
-//    }
-//
-//    func saveInferenceLog(className: String) {
-//        let context = CoreDataManager.shared.backgroundContext()
-//        context.perform {
-//            NSLog("Saving inference log")
-//            let entity = InferenceLogEntity.entity()
-//            let inferenceLog = InferenceLogEntity(entity: entity, insertInto: context)
-//            inferenceLog.class_name = className
-//            do {
-//                try context.save()
-//            } catch {
-//                debugPrint(error)
-//            }
-//        }
-//    }
+    func loadInferenceLogs() -> [InferenceLogEntity] {
+        let mainContext = CoreDataManager.shared.mainContext
+        let fetchRequest: NSFetchRequest<InferenceLogEntity> = InferenceLogEntity.fetchRequest()
+        do {
+            let results = try mainContext.fetch(fetchRequest)
+            return results
+        }
+        catch {
+            debugPrint(error)
+        }
+        return []
+    }
+
+    func saveInferenceLog(className: String) {
+        let context = CoreDataManager.shared.backgroundContext()
+        context.perform {
+            NSLog("Saving inference log")
+            let entity = InferenceLogEntity.entity()
+            let inferenceLog = InferenceLogEntity(entity: entity, insertInto: context)
+            inferenceLog.classLabel = className
+            do {
+                try context.save()
+            } catch {
+                debugPrint(error)
+            }
+        }
+    }
 }
 

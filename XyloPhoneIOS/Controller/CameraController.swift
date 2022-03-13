@@ -13,6 +13,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     @IBOutlet weak var previewView: UIImageView!
     weak var videoDevice: AVCaptureDevice?
     var currentCrop: Float = 512.0
+    var calibrationModeEnabled: Bool = false
     
     private var inProgressPhotoCaptureDelegates = [Int64: PhotoCaptureProcessor]()
     
@@ -21,15 +22,25 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         self.previewView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.width)
         self.previewView.bringSubviewToFront(CaptureButton)
         self.previewView.contentMode = .scaleAspectFill
+        if !calibrationModeEnabled {
+            zoomSlider.isHidden = true
+            CaptureButton.isHidden = false
+        } else {
+            zoomSlider.isHidden = false
+            CaptureButton.isHidden = false
+        }
     }
     
     @IBAction func wbChanged(_ sender: UISlider) {
-        let wbValue = (sender.value * 6500.0)
+       
         let device = self.videoDeviceInput.device
+        let wbValue = (sender.value * device.maxWhiteBalanceGain)
         do {
             try device.lockForConfiguration()
             defer { device.unlockForConfiguration() }
             let whiteBalanceGain = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(temperature: wbValue, tint: 0.0)
+            NSLog("wb \(wbValue)")
+            self.userDefaults.set(wbValue, forKey: "color_temperature")
             device.setWhiteBalanceModeLocked(with: device.deviceWhiteBalanceGains(for: whiteBalanceGain), completionHandler: { _ in
                     NSLog("White balance locked")
                 })
@@ -186,7 +197,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
 
                     if videoDevice.isWhiteBalanceModeSupported(.locked) {
                         NSLog("device type \(UIDevice().type)")
-                        var colorTemperature = Float(8700.0)
+                        var colorTemperature = Float(videoDevice.maxWhiteBalanceGain / 2)
                         
                         if (userDefaults.object(forKey: "color_temperature") != nil) {
                             colorTemperature = max(512.0, userDefaults.float(forKey: "color_temperature"))
@@ -199,9 +210,6 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                             let greenGain = userDefaults.float(forKey: "green_gain")
                             let blueGain = userDefaults.float(forKey: "blue_gain")
                             gain = AVCaptureDevice.WhiteBalanceGains(redGain: redGain, greenGain: greenGain, blueGain: blueGain)
-                        } else {
-                            let whiteBalanceGain = AVCaptureDevice.WhiteBalanceTemperatureAndTintValues(temperature: colorTemperature, tint: 0.0)
-                            gain = videoDevice.deviceWhiteBalanceGains(for: whiteBalanceGain)
                         }
                         
                         videoDevice.setWhiteBalanceModeLocked(with: gain, completionHandler: { _ in

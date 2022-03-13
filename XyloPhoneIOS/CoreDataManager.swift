@@ -5,7 +5,7 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     private init() {}
     private lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "XyloPhoneModel")
+        let container = NSPersistentContainer(name: "XyloPhoneIOS")
         container.loadPersistentStores(completionHandler: { _, error in
             _ = error.map { fatalError("Unresolved error \($0)") }
         })
