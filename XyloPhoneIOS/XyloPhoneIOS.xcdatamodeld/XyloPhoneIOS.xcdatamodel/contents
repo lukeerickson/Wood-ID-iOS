@@ -3,6 +3,7 @@
     <entity name="InferenceLogEntity" representedClassName="InferenceLogEntity" syncable="YES" codeGenerationType="class">
         <attribute name="classIndex" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="classLabel" optional="YES" attributeType="String"/>
+        <attribute name="image" optional="YES" attributeType="Binary"/>
         <attribute name="imgPath" optional="YES" attributeType="String"/>
         <attribute name="originalFilename" optional="YES" attributeType="String"/>
         <attribute name="score" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -11,6 +12,6 @@
         <attribute name="uid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="InferenceLogEntity" positionX="-63" positionY="-18" width="128" height="149"/>
+        <element name="InferenceLogEntity" positionX="-63" positionY="-18" width="128" height="164"/>
     </elements>
 </model>

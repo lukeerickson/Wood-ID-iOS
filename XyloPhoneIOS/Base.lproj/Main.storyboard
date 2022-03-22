@@ -18,43 +18,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uxE-sL-rie">
-                                <rect key="frame" x="113" y="801" width="188" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="qwN-mi-sQd"/>
-                                </constraints>
-                                <state key="normal" title="Select Wood Sample Image">
-                                    <color key="titleColor" systemColor="systemBlueColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="selectImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hqx-My-aad"/>
-                                </connections>
-                            </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PvB-wJ-QNj">
-                                <rect key="frame" x="79" y="117" width="256" height="256"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="256" id="HKI-lD-OPw"/>
-                                    <constraint firstAttribute="width" constant="256" id="gjG-db-sfD"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="No Identification Yet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uNq-Ii-aMt">
-                                <rect key="frame" x="130" y="332" width="154" height="21"/>
+                                <rect key="frame" x="125" y="415" width="154" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5p-Zv-avh">
-                                <rect key="frame" x="135" y="780" width="144" height="22"/>
-                                <state key="normal" title="Capture Image" image="camera" catalog="system">
-                                    <color key="titleColor" systemColor="systemBlueColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="showCamera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hbh-SW-0pL"/>
-                                </connections>
-                            </button>
-                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dAp-T7-F5a">
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dAp-T7-F5a">
                                 <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="XyloPhone" id="9N5-HZ-2Bi">
                                         <barButtonItem key="rightBarButtonItem" title="Item" image="gearshape.fill" catalog="system" id="LKr-vk-1nt">
@@ -65,24 +36,78 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="GLp-Js-dQ2">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="808" id="klG-oz-DCo"/>
+                                </constraints>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="inference_log_cell" rowHeight="150" id="NJV-i2-0Se" customClass="InferenceLogCell" customModule="XyloPhoneIOS" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NJV-i2-0Se" id="j4V-4P-Q3C">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="150"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="brF-ac-uMe">
+                                                    <rect key="frame" x="0.0" y="0.0" width="144" height="150"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="144" id="vJg-n8-Ger"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iT0-nO-G8J">
+                                                    <rect key="frame" x="152" y="64.5" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="brF-ac-uMe" firstAttribute="centerY" secondItem="j4V-4P-Q3C" secondAttribute="centerY" id="3X9-s5-RXP"/>
+                                                <constraint firstAttribute="bottom" secondItem="brF-ac-uMe" secondAttribute="bottom" id="HeF-u1-iQT"/>
+                                                <constraint firstItem="iT0-nO-G8J" firstAttribute="leading" secondItem="brF-ac-uMe" secondAttribute="trailing" constant="8" symbolic="YES" id="TPa-ZS-nGW"/>
+                                                <constraint firstItem="brF-ac-uMe" firstAttribute="top" secondItem="j4V-4P-Q3C" secondAttribute="top" id="k9s-qE-uXW"/>
+                                                <constraint firstItem="iT0-nO-G8J" firstAttribute="centerY" secondItem="brF-ac-uMe" secondAttribute="centerY" id="mDu-9R-xwJ"/>
+                                                <constraint firstItem="brF-ac-uMe" firstAttribute="leading" secondItem="j4V-4P-Q3C" secondAttribute="leading" id="wqY-za-CuQ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="InferenceLogImage" destination="brF-ac-uMe" id="Cij-bv-vKj"/>
+                                            <outlet property="classLabel" destination="iT0-nO-G8J" id="9DO-ZI-X5O"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J5p-Zv-avh">
+                                <rect key="frame" x="10" y="807" width="394" height="22"/>
+                                <state key="normal" title="Capture Image" image="camera" catalog="system">
+                                    <color key="titleColor" systemColor="systemBlueColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="showCamera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Hbh-SW-0pL"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="uxE-sL-rie" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="34e-SX-NWf"/>
-                            <constraint firstItem="uNq-Ii-aMt" firstAttribute="bottom" secondItem="PvB-wJ-QNj" secondAttribute="bottom" id="5Iw-7k-ACo"/>
-                            <constraint firstItem="J5p-Zv-avh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="PnD-gc-hVa"/>
+                            <constraint firstAttribute="trailing" secondItem="GLp-Js-dQ2" secondAttribute="trailing" id="Exq-3r-UF0"/>
                             <constraint firstItem="uNq-Ii-aMt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZID-zb-hyA"/>
-                            <constraint firstItem="uxE-sL-rie" firstAttribute="top" secondItem="J5p-Zv-avh" secondAttribute="bottom" constant="-1" id="bah-wg-af4"/>
-                            <constraint firstItem="PvB-wJ-QNj" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="g40-3P-o9X"/>
-                            <constraint firstItem="PvB-wJ-QNj" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="okq-zi-6hC"/>
+                            <constraint firstItem="GLp-Js-dQ2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="g1x-PD-voO"/>
+                            <constraint firstAttribute="bottom" secondItem="GLp-Js-dQ2" secondAttribute="bottom" id="lKz-1X-53K"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="J5p-Zv-avh" secondAttribute="bottom" constant="33" id="mSu-ko-sng"/>
+                            <constraint firstItem="GLp-Js-dQ2" firstAttribute="leading" secondItem="dAp-T7-F5a" secondAttribute="leading" id="nXx-5C-urq"/>
+                            <constraint firstItem="GLp-Js-dQ2" firstAttribute="trailing" secondItem="dAp-T7-F5a" secondAttribute="trailing" id="onO-Ep-FZ8"/>
                             <constraint firstItem="uNq-Ii-aMt" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="rdd-dd-KCz"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="uxE-sL-rie" secondAttribute="bottom" constant="11" id="u6T-c4-5Bb"/>
+                            <constraint firstItem="GLp-Js-dQ2" firstAttribute="top" secondItem="dAp-T7-F5a" secondAttribute="bottom" id="vgx-AN-0LQ"/>
+                            <constraint firstItem="J5p-Zv-avh" firstAttribute="centerX" secondItem="dAp-T7-F5a" secondAttribute="centerX" id="y7Y-hP-K8c"/>
+                            <constraint firstItem="J5p-Zv-avh" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="yU6-yb-riR"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="identificationlabel" destination="uNq-Ii-aMt" id="uhm-Gp-SLD"/>
-                        <outlet property="testImage" destination="PvB-wJ-QNj" id="gba-C9-t0i"/>
+                        <outlet property="inferenceLogTableView" destination="GLp-Js-dQ2" id="HRC-iz-Ww7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

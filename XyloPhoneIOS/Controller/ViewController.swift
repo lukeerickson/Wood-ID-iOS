@@ -28,11 +28,22 @@ extension UIViewController {
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraControllerDelegate {
     @IBOutlet weak var identificationlabel: UILabel!
-    @IBOutlet weak var testImage: UIImageView!
+
+    @IBOutlet weak var inferenceLogTableView: UITableView!
+    var inferenceLogs: [InferenceLogEntity] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        inferenceLogTableView.delegate = self
+        inferenceLogTableView.dataSource = self
         // Do any additional setup after loading the view.
+        self.inferenceLogs = loadInferenceLogs()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.inferenceLogs = loadInferenceLogs()
+        inferenceLogTableView.reloadData()
     }
     @IBAction func openCamera(_ sender: Any) {
         NSLog("Open camera")
@@ -61,6 +72,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
            return
            case .denied: // The user has previously denied access.
             NSLog("denied")
+                AVCaptureDevice.requestAccess(for: .video) { granted in
+                    if granted {
+                     let cameraController = CameraController()
+                     cameraController.modalPresentationStyle = .fullScreen
+                     cameraController.delegate = self
+                     self.present(cameraController, animated: true)
+                    }
+                }
                return
 
            case .restricted: // The user can't grant access due to restrictions.
@@ -111,15 +130,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let data = process(photoOutput: photoData, cropSize: cropSize) {
             PHPhotoLibrary.requestAuthorization { status in
                 if status == .authorized {
-//                    PHPhotoLibrary.shared().performChanges({
-//                        let options = PHAssetResourceCreationOptions()
-//                        let creationRequest = PHAssetCreationRequest.forAsset()
-//                        creationRequest.addResource(with: .photo, data: data.jpegData(compressionQuality: 100)!, options: options)
-//                    }, completionHandler: { _, error in
-//                        if let error = error {
-//                            print("Error occurred while saving photo to photo library: \(error)")
-//                        }
-//                    })
+                    PHPhotoLibrary.shared().performChanges({
+                        let options = PHAssetResourceCreationOptions()
+                        let creationRequest = PHAssetCreationRequest.forAsset()
+                        creationRequest.addResource(with: .photo, data: data.jpegData(compressionQuality: 100)!, options: options)
+                    }, completionHandler: { _, error in
+                        if let error = error {
+                            print("Error occurred while saving photo to photo library: \(error)")
+                        }
+                    })
                 } else {
                     NSLog("not authorized!")
                 }
@@ -144,8 +163,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     private func process(photoOutput: Data?, cropSize: Float) -> UIImage? {
         let resizedImage = preprocessImage(photoOutput: photoOutput, cropSize: cropSize).resized(to: CGSize(width: 512, height: 512))
         
-        testImage.image = resizedImage
-
         guard let pixelBuffer = resizedImage.normalized() else {
             return nil
         }
@@ -155,7 +172,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let outputs = try? module.predict(pixelBuffer, resultCount: labels.count) {
             NSLog("Inference done")
             let result = outputs.0.first!
-            saveInferenceLog(className: result.label)
+            saveInferenceLog(className: result.label, image: photoOutput!)
             identificationlabel.text = "\(result.label) = \(result.score)"
             return resizedImage
         } else {
@@ -163,6 +180,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
 
     }
+    
+
     
     func loadInferenceLogs() -> [InferenceLogEntity] {
         let mainContext = CoreDataManager.shared.mainContext
@@ -177,13 +196,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return []
     }
 
-    func saveInferenceLog(className: String) {
+    func saveInferenceLog(className: String, image: Data) {
         let context = CoreDataManager.shared.backgroundContext()
         context.perform {
             NSLog("Saving inference log")
             let entity = InferenceLogEntity.entity()
             let inferenceLog = InferenceLogEntity(entity: entity, insertInto: context)
             inferenceLog.classLabel = className
+            inferenceLog.image = image
             do {
                 try context.save()
             } catch {
@@ -193,3 +213,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 }
 
+
+extension ViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("You tapped me!")
+    }
+}
+extension ViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return inferenceLogs.count;
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "inference_log_cell", for: indexPath) as! InferenceLogCell
+        if let imagedata = inferenceLogs[indexPath.item].image {
+            cell.InferenceLogImage.image = UIImage(data: imagedata)
+        }
+
+        cell.classLabel.text = inferenceLogs[indexPath.item].classLabel
+        return cell;
+        
+    }
+}
