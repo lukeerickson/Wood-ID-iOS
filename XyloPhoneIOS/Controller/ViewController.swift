@@ -32,10 +32,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var inferenceLogTableView: UITableView!
     var inferenceLogs: [InferenceLogEntity] = []
     
+    
+    var windowOrientation: UIInterfaceOrientation {
+        return view.window?.windowScene?.interfaceOrientation ?? .unknown
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         inferenceLogTableView.delegate = self
         inferenceLogTableView.dataSource = self
+        AppUtility.lockOrientation(.portrait)
         // Do any additional setup after loading the view.
         self.inferenceLogs = loadInferenceLogs()
     }
@@ -63,7 +69,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             NSLog("Not Authorized?")
                AVCaptureDevice.requestAccess(for: .video) { granted in
                    if granted {
-                    let cameraController = CameraController()
+                    let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
                     cameraController.modalPresentationStyle = .fullScreen
                     cameraController.delegate = self
                     self.present(cameraController, animated: true)
@@ -216,9 +222,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("You tapped me!")
+        let detailsController = self.storyboard?.instantiateViewController(withIdentifier: "DetailsController") as! DetailsController
+        detailsController.inferenceLog = inferenceLogs[indexPath.item]
+        present(detailsController, animated: true)
     }
 }
+
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return inferenceLogs.count;

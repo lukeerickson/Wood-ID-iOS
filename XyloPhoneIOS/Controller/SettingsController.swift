@@ -68,6 +68,7 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
         shutterSpeedTextField.delegate = self
         colorTempTextField.delegate = self
         isoTextField.delegate = self
+        AppUtility.lockOrientation(.portrait)
     }
     
     var windowOrientation: UIInterfaceOrientation {
