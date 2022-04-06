@@ -30,6 +30,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var identificationlabel: UILabel!
 
     @IBOutlet weak var inferenceLogTableView: UITableView!
+    var mainContext = CoreDataManager.shared.mainContext
     var inferenceLogs: [InferenceLogEntity] = []
     
     
@@ -134,8 +135,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             return
         }
         if let data = process(photoOutput: photoData, cropSize: cropSize) {
+
             PHPhotoLibrary.requestAuthorization { status in
                 if status == .authorized {
+                    NSLog("Saving image \(data.size.width) x \(data.size.height)")
                     PHPhotoLibrary.shared().performChanges({
                         let options = PHAssetResourceCreationOptions()
                         let creationRequest = PHAssetCreationRequest.forAsset()
@@ -161,7 +164,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             NSLog("Square size: \(cropSize)")
             let x = image.size.width / 2.0 - newCropWidth/2.0;
             let y = image.size.height / 2.0 - newCropHeight/2.0;
-            let cropRect = CGRect(x: y, y: x, width: newCropWidth, height: newCropHeight);
+            let cropRect = CGRect(x: x, y: y, width: newCropWidth, height: newCropHeight);
             let imageRef = image.cgImage!.cropping(to: cropRect)
             return UIImage.init(cgImage: imageRef!, scale: 1.0, orientation: .right)
     }
@@ -178,8 +181,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let outputs = try? module.predict(pixelBuffer, resultCount: labels.count) {
             NSLog("Inference done")
             let result = outputs.0.first!
-            saveInferenceLog(className: result.label, image: photoOutput!)
-            identificationlabel.text = "\(result.label) = \(result.score)"
+            saveInferenceLog(className: result.label, image: resizedImage.pngData()!, score: result.score, labels: labels, topk: outputs.0)
             return resizedImage
         } else {
             return nil
@@ -187,11 +189,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     }
     
-
-    
     func loadInferenceLogs() -> [InferenceLogEntity] {
-        let mainContext = CoreDataManager.shared.mainContext
         let fetchRequest: NSFetchRequest<InferenceLogEntity> = InferenceLogEntity.fetchRequest()
+        let sort = NSSortDescriptor(key: #keyPath(InferenceLogEntity.timestamp), ascending: false)
+        fetchRequest.sortDescriptors = [sort]
         do {
             let results = try mainContext.fetch(fetchRequest)
             return results
@@ -202,16 +203,29 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return []
     }
 
-    func saveInferenceLog(className: String, image: Data) {
+    func saveInferenceLog(className: String, image: Data, score: Float, labels: [String], topk: [InferenceResult]) {
         let context = CoreDataManager.shared.backgroundContext()
         context.perform {
             NSLog("Saving inference log")
             let entity = InferenceLogEntity.entity()
             let inferenceLog = InferenceLogEntity(entity: entity, insertInto: context)
+            inferenceLog.uid = UUID()
             inferenceLog.classLabel = className
             inferenceLog.image = image
+            inferenceLog.timestamp = Date()
+            let topKArr = topk.map { (result) -> TopKPair in
+                TopKPair(classLabel: result.label, score: String(describing: result.score))
+            }
+
             do {
+                try inferenceLog.topk = String(data: JSONEncoder().encode(topKArr), encoding: .utf8)
+                inferenceLog.score = score
+                try inferenceLog.labels = String(data: JSONEncoder().encode(labels), encoding: .utf8)
                 try context.save()
+                self.inferenceLogs.append(inferenceLog)
+                DispatchQueue.main.async {
+                    self.inferenceLogTableView.reloadData()
+                }
             } catch {
                 debugPrint(error)
             }
@@ -226,6 +240,18 @@ extension ViewController: UITableViewDelegate {
         detailsController.inferenceLog = inferenceLogs[indexPath.item]
         present(detailsController, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let log = inferenceLogs[indexPath.item]
+        mainContext.delete(log)
+        do {
+            try mainContext.save()
+            inferenceLogs.remove(at: indexPath.item)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } catch {
+            NSLog("error while removing element")
+        }
+    }
 }
 
 extension ViewController: UITableViewDataSource {
@@ -236,11 +262,19 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "inference_log_cell", for: indexPath) as! InferenceLogCell
         if let imagedata = inferenceLogs[indexPath.item].image {
-            cell.InferenceLogImage.image = UIImage(data: imagedata)
+            let uimage = UIImage(data: imagedata)
+            cell.InferenceLogImage.image = uimage
         }
-
-        cell.classLabel.text = inferenceLogs[indexPath.item].classLabel
-        return cell;
+        let inferenceLog = inferenceLogs[indexPath.item]
+        cell.controller = self
+        cell.inferenceLog = inferenceLog
+        cell.classLabel.text = inferenceLog.classLabel
+        if let timestamp = inferenceLog.timestamp {
+            let dateFormatterGet = DateFormatter()
+            dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            cell.timestampLabel.text = dateFormatterGet.string(from: timestamp)
+        }
         
+        return cell;
     }
 }

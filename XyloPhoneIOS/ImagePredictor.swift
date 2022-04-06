@@ -3,7 +3,7 @@ import UIKit
 class ImagePredictor: Predictor {
     private var isRunning: Bool = false
     private lazy var module: VisionTorchModule = {
-        if let filePath = Bundle.main.path(forResource: "model", ofType: "pt"),
+        if let filePath = Bundle.main.path(forResource: "fips_wood_model_mobile", ofType: "pt"),
             let module = VisionTorchModule(fileAtPath: filePath) {
             return module
         } else {
@@ -12,7 +12,7 @@ class ImagePredictor: Predictor {
     }()
 
     private var labels: [String] = {
-        if let filePath = Bundle.main.path(forResource: "labels", ofType: "txt"),
+        if let filePath = Bundle.main.path(forResource: "class_labels", ofType: "txt"),
             let labels = try? String(contentsOfFile: filePath) {
             return labels.components(separatedBy: "\n")
         } else {
@@ -20,7 +20,7 @@ class ImagePredictor: Predictor {
         }
     }()
 
-    func predict(_ buffer: [Float32], resultCount: Int) throws -> ([InferenceResult], Double)? {
+    func predict(_ buffer: [Float32], resultCount: Int) throws -> ([InferenceResult], Double, [String])? {
         if isRunning {
             return nil
         }
@@ -40,7 +40,7 @@ class ImagePredictor: Predictor {
             NSLog("\(labels[x]) -> \(outputs[x].floatValue)")
         }
         let results = topK(scores: outputs, labels: labels, count: resultCount)
-        return (results, inferenceTime)
+        return (results, inferenceTime, labels)
     }
     
     func classLabels() -> ([String]) {

@@ -1,0 +1,18 @@
+[
+   {
+        "id" :  "iPhone 8",
+        "cropFactor" : "512.0",
+        "redGain" : "1.0",
+        "blueGain" : "1.1",
+        "exposureDuration" : "1",
+        "iso" : "200"
+    },
+   {
+       "id" : "iPhone SE 2nd gen",
+       "cropFactor" : "512.0",
+       "redGain" : "1.0",
+       "blueGain" : "1.1",
+       "exposureDuration" : "1",
+       "iso" : "200"
+   }
+]

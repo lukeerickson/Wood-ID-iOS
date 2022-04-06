@@ -24,6 +24,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         self.previewView.contentMode = .scaleAspectFill
         if !calibrationModeEnabled {
             zoomSlider.isHidden = true
+            
             CaptureButton.isHidden = false
         } else {
             zoomSlider.isHidden = false
@@ -83,8 +84,11 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                         self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = nil
                         DispatchQueue.main.async {
                             NSLog("photo capture done!")
-                            self.delegate?.didCaptureImage(photoOutput: data!, cropSize: self.currentCrop)
-                            self.dismiss(animated: true)
+                            if let photo = data {
+                                self.session.stopRunning()
+                                self.delegate?.didCaptureImage(photoOutput: photo, cropSize: self.currentCrop)
+                                self.dismiss(animated: true)
+                            }
                         }
                     }
 
@@ -199,18 +203,15 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                         NSLog("device type \(UIDevice().type)")
                         var colorTemperature = Float(videoDevice.maxWhiteBalanceGain / 2)
                         
-                        if (userDefaults.object(forKey: "color_temperature") != nil) {
-                            colorTemperature = max(512.0, userDefaults.float(forKey: "color_temperature"))
-                        }
+//                        if (userDefaults.object(forKey: "color_temperature") != nil) {
+//                            colorTemperature = max(512.0, userDefaults.float(forKey: "color_temperature"))
+//                        }
                         
-                        var gain = AVCaptureDevice.WhiteBalanceGains(redGain: 1.0, greenGain: 1.0, blueGain: 1.0)
-                        
-                        if (userDefaults.bool(forKey: "custom_gain")) {
-                            let redGain = userDefaults.float(forKey: "red_gain")
-                            let greenGain = userDefaults.float(forKey: "green_gain")
-                            let blueGain = userDefaults.float(forKey: "blue_gain")
-                            gain = AVCaptureDevice.WhiteBalanceGains(redGain: redGain, greenGain: greenGain, blueGain: blueGain)
-                        }
+                        let redGain = Float(userDefaults.string(forKey: "red_gain") ?? "1.0")! * 2.0
+                        let greenGain = Float(userDefaults.string(forKey: "green_gain") ?? "1.0")!
+                        let blueGain = Float(userDefaults.string(forKey: "blue_gain") ?? "1.0")! * 2.0
+                        let gain = AVCaptureDevice.WhiteBalanceGains(redGain: redGain, greenGain: greenGain, blueGain: blueGain)
+
                         
                         videoDevice.setWhiteBalanceModeLocked(with: gain, completionHandler: { _ in
                             NSLog("White balance locked \(colorTemperature)")
@@ -222,11 +223,11 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                         var iso = 200;
                         
                         if (userDefaults.object(forKey: "exposure_duration") != nil) {
-                            duration = userDefaults.integer(forKey: "exposure_duration")
+                            duration = Int(userDefaults.string(forKey: "exposure_duration") ?? "1")!
                         }
                         
                         if (userDefaults.object(forKey: "iso") != nil) {
-                            iso = userDefaults.integer(forKey: "iso")
+                            iso = Int(userDefaults.string(forKey: "iso") ?? "200")!
                         }
                         
                         videoDevice.setExposureModeCustom(duration: CMTime.init(value: CMTimeValue(duration), timescale: 1000), iso: Float(iso),

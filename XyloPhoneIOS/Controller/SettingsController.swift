@@ -8,6 +8,7 @@
 import Foundation
 import AVFoundation
 import UIKit
+import CoreData
 
 class SettingsController: UIViewController, UITextFieldDelegate  {
     @IBOutlet weak var isoTextField: UITextField!
@@ -17,6 +18,12 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
     @IBOutlet weak var shutterSpeedTextField: UITextField!
     
     @IBOutlet weak var colorTempTextField: UITextField!
+    
+    @IBOutlet weak var redGainTextField: UITextField!
+    
+    @IBOutlet weak var greenGainTextField: UITextField!
+    
+    @IBOutlet weak var blueGainTextField: UITextField!
     
     private let userDefaults = UserDefaults()
     
@@ -64,10 +71,16 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
         shutterSpeedTextField.text = self.userDefaults.string(forKey: "exposure_duration")
         colorTempTextField.text = self.userDefaults.string(forKey: "color_temperature")
         isoTextField.text = self.userDefaults.string(forKey: "iso")
+        redGainTextField.text = self.userDefaults.string(forKey: "red_gain")
+        blueGainTextField.text = self.userDefaults.string(forKey: "blue_gain")
+        greenGainTextField.text = self.userDefaults.string(forKey: "green_gain")
         zoomFactorTextField.delegate = self
         shutterSpeedTextField.delegate = self
         colorTempTextField.delegate = self
         isoTextField.delegate = self
+        redGainTextField.delegate = self
+        blueGainTextField.delegate = self
+        greenGainTextField.delegate = self
         AppUtility.lockOrientation(.portrait)
     }
     
@@ -75,21 +88,54 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
         return view.window?.windowScene?.interfaceOrientation ?? .unknown
     }
     
+    @IBAction func clearAllData(_ sender: Any) {
+        let refreshAlert = UIAlertController(title: "Delete All", message: "All data will be lost. Are you sure you want to continue", preferredStyle: UIAlertController.Style.alert)
+
+        refreshAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
+            let mainContext = CoreDataManager.shared.mainContext
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "InferenceLogEntity")
+            let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            
+            do {
+                try mainContext.persistentStoreCoordinator!.execute(deleteRequest, with: mainContext)
+            } catch let error as NSError {
+                NSLog(error.description)
+            }
+        }))
+
+        refreshAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+        }))
+
+        present(refreshAlert, animated: true, completion: nil)
+    }
+    
     @IBAction func updateSettings(_ sender: Any) {
         if let zoomFactor = zoomFactorTextField.text {
-            self.userDefaults.set(Float(zoomFactor), forKey: "current_crop")
+            self.userDefaults.set(zoomFactor, forKey: "current_crop")
         }
         
         if let shutterSpeed = shutterSpeedTextField.text  {
-            self.userDefaults.set(Int(shutterSpeed), forKey: "exposure_duration")
+            self.userDefaults.set(shutterSpeed, forKey: "exposure_duration")
         }
         
         if let colorTemp = colorTempTextField.text {
-            self.userDefaults.set(Float(colorTemp), forKey: "color_temperature")
+            self.userDefaults.set(colorTemp, forKey: "color_temperature")
         }
         
         if let iso = isoTextField.text {
-            self.userDefaults.set(Int(iso), forKey: "iso")
+            self.userDefaults.set(iso, forKey: "iso")
+        }
+        
+        if let red = redGainTextField.text {
+            self.userDefaults.set(red, forKey: "red_gain")
+        }
+        
+        if let blue = blueGainTextField.text {
+            self.userDefaults.set(blue, forKey: "blue_gain")
+        }
+        
+        if let green = greenGainTextField.text {
+            self.userDefaults.set(green, forKey: "green_gain")
         }
         
         self.dismiss(animated: true)

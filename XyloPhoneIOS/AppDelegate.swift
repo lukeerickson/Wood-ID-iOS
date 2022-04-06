@@ -8,13 +8,60 @@
 import UIKit
 import CoreData
 
+struct PhoneSettings: Decodable {
+    let id: String
+    let cropFactor: String
+    let redGain: String?
+    let blueGain: String?
+    let greeGain: String?
+    let exposureDuration: String?
+    let iso: String?
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+    private let userDefaults = UserDefaults()
+    
+    fileprivate func settingWithDefault(key: String, value: String?, defval: String) {
+        if let settingval =  value {
+            self.userDefaults.set(settingval, forKey: key)
+        } else {
+            self.userDefaults.set(defval, forKey: key)
+        }
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let currentPhoneModel = UIDevice.current.type.rawValue
+        NSLog("Phone model \"\(currentPhoneModel)\"")
+        let currentSettings =  userDefaults.object(forKey: "current_phone_settings")
+    
+//        if currentSettings == nil {
+        NSLog("Setup initial settings")
+        if let filePath = Bundle.main.path(forResource: "phone_settings", ofType: "json") {
+            do {
+            let jsonString = try String(contentsOfFile: filePath)
+                self.userDefaults.set(jsonString, forKey: "current_phone_settings")
+                let phoneSettings = try JSONDecoder().decode([PhoneSettings].self, from: jsonString.data(using: .utf8)!)
+                
+                if let applicableSettings = phoneSettings.first(where: { (phoneSettings) -> Bool in
+                                    phoneSettings.id == currentPhoneModel
+                    }
+                ) {
+                    NSLog("Found setting for \(currentPhoneModel) using cropFactor \(applicableSettings.cropFactor)")
+                    settingWithDefault(key: "current_crop", value: applicableSettings.cropFactor, defval: "1.0")
+                    settingWithDefault(key: "red_gain", value: applicableSettings.redGain, defval: "1.0")
+                    settingWithDefault(key: "blue_gain", value: applicableSettings.blueGain, defval: "1.0")
+                    settingWithDefault(key: "green_gain", value: applicableSettings.greeGain, defval: "1.0")
+                    settingWithDefault(key: "iso", value: applicableSettings.iso, defval: "200")
+                    settingWithDefault(key: "exposure_duration", value: applicableSettings.exposureDuration, defval: "1")
+                }
+            } catch {
+                
+            }
+        }
+//        }
+        
         return true
     }
 
