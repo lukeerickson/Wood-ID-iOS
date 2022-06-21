@@ -17,6 +17,7 @@ class DetailsController: UIViewController {
     @IBOutlet weak var sampleImage: UIImageView!
     @IBOutlet weak var sampleLabel: UILabel!
     @IBOutlet weak var topkContainer: UITableView!
+    @IBOutlet weak var timeStampLabel: UILabel!
     weak open var inferenceLog: (InferenceLogEntity)?
     var topKArr: [TopKPair] = []
     
@@ -28,6 +29,11 @@ class DetailsController: UIViewController {
         topkContainer.delegate = self
         topkContainer.dataSource = self
         sampleLabel.text = inferenceLog?.classLabel
+        if let timestamp = inferenceLog?.timestamp {
+            let dateFormatterGet = DateFormatter()
+            dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            timeStampLabel.text = dateFormatterGet.string(from: timestamp)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

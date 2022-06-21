@@ -21,6 +21,7 @@ struct PhoneSettings: Decodable {
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     private let userDefaults = UserDefaults()
+    private var visionModule: VisionTorchModule?
     
     fileprivate func settingWithDefault(key: String, value: String?, defval: String) {
         if let settingval =  value {
@@ -30,16 +31,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func getTorchVisionModule() -> VisionTorchModule? {
+        if self.visionModule == nil {
+            if let filePath = userDefaults.object(forKey: "currentModel") {
+                NSLog("loading extracted model at \(filePath)")
+                let finalModelFilePath = "\(filePath as! String)/model.pt"
+                let fileManager = FileManager.default
+                
+                if (!fileManager.fileExists(atPath: finalModelFilePath)) {
+                    fatalError("Model does not exist at \(finalModelFilePath)")
+                }
+                               
+                if let module = VisionTorchModule(fileAtPath: finalModelFilePath) {
+                    self.visionModule = module
+                    return module
+                }
+            } else {
+                fatalError("Failed to load model!")
+            }
+            return nil
+        }
+        return self.visionModule
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let currentPhoneModel = UIDevice.current.type.rawValue
         NSLog("Phone model \"\(currentPhoneModel)\"")
         let currentSettings =  userDefaults.object(forKey: "current_phone_settings")
     
-//        if currentSettings == nil {
         NSLog("Setup initial settings")
+        let modelPath = userDefaults.object(forKey: "currentModel")
+        
+        if modelPath == nil {
+            NSLog("Setting up initial model")
+            DispatchQueue.global(qos: .default).async {
+                if let modelPath = ModelUtility.installDefaultModel() {
+                    NSLog("Model is at \(modelPath.path)")
+                    self.userDefaults.set(modelPath.path.replacingOccurrences(of: "file://", with: ""), forKey: "currentModel")
+                }
+            }
+        }
+        
         if let filePath = Bundle.main.path(forResource: "phone_settings", ofType: "json") {
             do {
+
             let jsonString = try String(contentsOfFile: filePath)
                 self.userDefaults.set(jsonString, forKey: "current_phone_settings")
                 let phoneSettings = try JSONDecoder().decode([PhoneSettings].self, from: jsonString.data(using: .utf8)!)

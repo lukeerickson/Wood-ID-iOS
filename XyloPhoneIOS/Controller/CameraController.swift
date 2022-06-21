@@ -85,10 +85,12 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                         DispatchQueue.main.async {
                             NSLog("photo capture done!")
                             if let photo = data {
+                                NSLog("photo avail")
                                 self.session.stopRunning()
                                 self.delegate?.didCaptureImage(photoOutput: photo, cropSize: self.currentCrop)
                                 self.dismiss(animated: true)
                             }
+                            NSLog("No photo avail")
                         }
                     }
 
@@ -187,7 +189,8 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             
             
             NSLog("camera \(defaultVideoDevice.debugDescription)")
-            NSLog("Current format: %@, max zoom factor: %f", videoDevice.activeFormat, videoDevice.maxAvailableVideoZoomFactor);
+            NSLog("Current format: %@, min zoom factor: %f, max zoom factor: %f", videoDevice.activeFormat,
+                  videoDevice.minAvailableVideoZoomFactor, videoDevice.maxAvailableVideoZoomFactor);
             
             let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
             
@@ -235,6 +238,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                             NSLog("Exposure locked \(duration) ms")
                         })
                     }
+                    
                 } catch {
                     NSLog("Unable to lock device")
                 }

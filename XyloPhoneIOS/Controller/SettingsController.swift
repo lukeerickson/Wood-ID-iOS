@@ -17,8 +17,6 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
     
     @IBOutlet weak var shutterSpeedTextField: UITextField!
     
-    @IBOutlet weak var colorTempTextField: UITextField!
-    
     @IBOutlet weak var redGainTextField: UITextField!
     
     @IBOutlet weak var greenGainTextField: UITextField!
@@ -69,14 +67,12 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
         // Do any additional setup after loading the view.
         zoomFactorTextField.text = self.userDefaults.string(forKey: "current_crop")
         shutterSpeedTextField.text = self.userDefaults.string(forKey: "exposure_duration")
-        colorTempTextField.text = self.userDefaults.string(forKey: "color_temperature")
         isoTextField.text = self.userDefaults.string(forKey: "iso")
         redGainTextField.text = self.userDefaults.string(forKey: "red_gain")
         blueGainTextField.text = self.userDefaults.string(forKey: "blue_gain")
         greenGainTextField.text = self.userDefaults.string(forKey: "green_gain")
         zoomFactorTextField.delegate = self
         shutterSpeedTextField.delegate = self
-        colorTempTextField.delegate = self
         isoTextField.delegate = self
         redGainTextField.delegate = self
         blueGainTextField.delegate = self
@@ -116,10 +112,6 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
         
         if let shutterSpeed = shutterSpeedTextField.text  {
             self.userDefaults.set(shutterSpeed, forKey: "exposure_duration")
-        }
-        
-        if let colorTemp = colorTempTextField.text {
-            self.userDefaults.set(colorTemp, forKey: "color_temperature")
         }
         
         if let iso = isoTextField.text {

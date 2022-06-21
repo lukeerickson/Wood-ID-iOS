@@ -2,14 +2,14 @@ import UIKit
 
 class ImagePredictor: Predictor {
     private var isRunning: Bool = false
-    private lazy var module: VisionTorchModule = {
-        if let filePath = Bundle.main.path(forResource: "fips_wood_model_mobile", ofType: "pt"),
-            let module = VisionTorchModule(fileAtPath: filePath) {
-            return module
-        } else {
-            fatalError("Failed to load model!")
-        }
-    }()
+//    private lazy var module: VisionTorchModule = {
+//        if let filePath = Bundle.main.path(forResource: "fips_wood_model_mobile", ofType: "pt"),
+//            let module = VisionTorchModule(fileAtPath: filePath) {
+//            return module
+//        } else {
+//            fatalError("Failed to load model!")
+//        }
+//    }()
 
     private var labels: [String] = {
         if let filePath = Bundle.main.path(forResource: "class_labels", ofType: "txt"),
@@ -28,19 +28,24 @@ class ImagePredictor: Predictor {
         let startTime = CACurrentMediaTime()
         var tensorBuffer = buffer;
  
-        guard let outputs = module.predictImage(UnsafeMutableRawPointer(&tensorBuffer)
-                                                , size: Int32(labels.count)) else {
-            throw PredictorError.invalidInputTensor
+        if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
+            if let module = currentAppDelegate.getTorchVisionModule() {
+                guard let outputs = module.predictImage(UnsafeMutableRawPointer(&tensorBuffer)
+                                                        , size: Int32(labels.count)) else {
+                    throw PredictorError.invalidInputTensor
+                }
+                isRunning = false
+                NSLog("Number of outputs \(outputs.count)")
+                NSLog("Number of classes \(labels.count)")
+                let inferenceTime = (CACurrentMediaTime() - startTime) * 1000
+                for x in 0..<outputs.count {
+                    NSLog("\(labels[x]) -> \(outputs[x].floatValue)")
+                }
+                let results = topK(scores: outputs, labels: labels, count: resultCount)
+                return (results, inferenceTime, labels)
+            }
         }
-        isRunning = false
-        NSLog("Number of outputs \(outputs.count)")
-        NSLog("Number of classes \(labels.count)")
-        let inferenceTime = (CACurrentMediaTime() - startTime) * 1000
-        for x in 0..<outputs.count {
-            NSLog("\(labels[x]) -> \(outputs[x].floatValue)")
-        }
-        let results = topK(scores: outputs, labels: labels, count: resultCount)
-        return (results, inferenceTime, labels)
+        return ([], 0.0, [])
     }
     
     func classLabels() -> ([String]) {

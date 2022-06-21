@@ -17,3 +17,9 @@ carthage update
 
 pod update
 
+3. Place a copy of model.zip into
+
+<project>/XyloPhoneIOS/model/model.zip
+
+The model itself is not included in this repo as it is really big (40-100MB)
+

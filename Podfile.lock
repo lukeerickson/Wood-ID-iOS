@@ -4,17 +4,22 @@ PODS:
   - LibTorch/Core (1.9.0):
     - LibTorch/Torch
   - LibTorch/Torch (1.9.0)
+  - ZIPFoundation (0.9.13)
 
 DEPENDENCIES:
   - LibTorch (~> 1.9.0)
+  - ZIPFoundation (~> 0.9)
 
 SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - ZIPFoundation
   trunk:
     - LibTorch
 
 SPEC CHECKSUMS:
   LibTorch: d89f452b8b932002bd98884b3921850a95c35e14
+  ZIPFoundation: ae5b4b813d216d3bf0a148773267fff14bd51d37
 
-PODFILE CHECKSUM: 402e58c69e3253ec31772ef7a4bef39a16814ad0
+PODFILE CHECKSUM: 8666804a80ef6ace209595fb6fc7f2f8c17b1219
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

@@ -61,19 +61,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
             case .authorized: // The user has previously granted access to the camera.
                 NSLog("Authorized?")
-                let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
-                cameraController.delegate = self
-                cameraController.modalPresentationStyle = .fullScreen
-                present(cameraController, animated: true)
+                DispatchQueue.main.async {
+                    let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
+                    cameraController.delegate = self
+                    cameraController.modalPresentationStyle = .fullScreen
+                    self.present(cameraController, animated: true)
+                }
+                
                return
            case .notDetermined: // The user has not yet been asked for camera access.
             NSLog("Not Authorized?")
                AVCaptureDevice.requestAccess(for: .video) { granted in
                    if granted {
+                       DispatchQueue.main.async {
                     let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
-                    cameraController.modalPresentationStyle = .fullScreen
-                    cameraController.delegate = self
-                    self.present(cameraController, animated: true)
+
+                        cameraController.modalPresentationStyle = .fullScreen
+                        cameraController.delegate = self
+                        self.present(cameraController, animated: true)
+                       }
+                    
                    }
                }
            return
@@ -97,6 +104,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
         
+    @IBAction func processExport(_ sender: Any) {
+        NSLog("export button pressed!")
+        ExportUtil.exportToCSV(context: mainContext)
+    }
+    
     @IBAction func selectImage(_ sender: Any) {
         NSLog("select Image!")
         let imagePickerController = UIImagePickerController()
@@ -134,14 +146,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             print("No photo data resource")
             return
         }
-        if let data = process(photoOutput: photoData, cropSize: cropSize) {
-
+        let res = process(photoOutput: photoData, cropSize: cropSize)
+        if let data = res.0 {
             PHPhotoLibrary.requestAuthorization { status in
                 if status == .authorized {
                     NSLog("Saving image \(data.size.width) x \(data.size.height)")
                     PHPhotoLibrary.shared().performChanges({
                         let options = PHAssetResourceCreationOptions()
                         let creationRequest = PHAssetCreationRequest.forAsset()
+                        
                         creationRequest.addResource(with: .photo, data: data.jpegData(compressionQuality: 100)!, options: options)
                     }, completionHandler: { _, error in
                         if let error = error {
@@ -169,11 +182,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             return UIImage.init(cgImage: imageRef!, scale: 1.0, orientation: .right)
     }
     
-    private func process(photoOutput: Data?, cropSize: Float) -> UIImage? {
+    private func process(photoOutput: Data?, cropSize: Float) -> (UIImage?, [InferenceResult]) {
         let resizedImage = preprocessImage(photoOutput: photoOutput, cropSize: cropSize).resized(to: CGSize(width: 512, height: 512))
         
         guard let pixelBuffer = resizedImage.normalized() else {
-            return nil
+            return (nil, [])
         }
         let module = ImagePredictor()
         let labels = module.classLabels()
@@ -182,9 +195,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             NSLog("Inference done")
             let result = outputs.0.first!
             saveInferenceLog(className: result.label, image: resizedImage.pngData()!, score: result.score, labels: labels, topk: outputs.0)
-            return resizedImage
+            return (resizedImage, outputs.0)
         } else {
-            return nil
+            return (nil, [])
         }
 
     }
@@ -223,8 +236,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 try inferenceLog.labels = String(data: JSONEncoder().encode(labels), encoding: .utf8)
                 try context.save()
                 self.inferenceLogs.append(inferenceLog)
+                
                 DispatchQueue.main.async {
                     self.inferenceLogTableView.reloadData()
+                    NSLog("Inference Log saved.")
                 }
             } catch {
                 debugPrint(error)
@@ -256,6 +271,7 @@ extension ViewController: UITableViewDelegate {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        NSLog("count \(inferenceLogs.count)")
         return inferenceLogs.count;
     }
     
@@ -273,6 +289,8 @@ extension ViewController: UITableViewDataSource {
             let dateFormatterGet = DateFormatter()
             dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
             cell.timestampLabel.text = dateFormatterGet.string(from: timestamp)
+        } else  {
+            cell.timestampLabel.text = ""
         }
         
         return cell;
