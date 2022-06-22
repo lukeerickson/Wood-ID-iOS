@@ -10,6 +10,9 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     weak open var delegate: (CameraControllerDelegate)?
     @IBOutlet weak var CaptureButton: UIButton!
     @IBOutlet weak var zoomSlider: UISlider!
+    @IBOutlet weak var redSlider: UISlider!
+    @IBOutlet weak var blueSlider: UISlider!
+    @IBOutlet weak var greenSlider: UISlider!
     @IBOutlet weak var previewView: UIImageView!
     weak var videoDevice: AVCaptureDevice?
     var currentCrop: Float = 512.0
@@ -24,10 +27,15 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         self.previewView.contentMode = .scaleAspectFill
         if !calibrationModeEnabled {
             zoomSlider.isHidden = true
-            
+            redSlider.isHidden = true
+            greenSlider.isHidden = true
+            blueSlider.isHidden = true
             CaptureButton.isHidden = false
         } else {
             zoomSlider.isHidden = false
+            redSlider.isHidden = false
+            greenSlider.isHidden = false
+            blueSlider.isHidden = false
             CaptureButton.isHidden = false
         }
     }
@@ -50,6 +58,64 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         }
     }
     
+    
+    @IBAction func redSliderChanged(_ sender: UISlider) {
+        do {
+            try videoDevice?.lockForConfiguration()
+            defer { videoDevice?.unlockForConfiguration() }
+        
+            let redGainVal = 1.0 + sender.value * (videoDevice!.maxWhiteBalanceGain - 1.0)
+            userDefaults.set("\(redGainVal)", forKey: "red_gain")
+            updateWhiteBalance()
+        } catch {
+            NSLog("error changing gain")
+        }
+    }
+    
+    @IBAction func greenSliderChanged(_ sender: UISlider) {
+        do {
+            try videoDevice?.lockForConfiguration()
+            defer { videoDevice?.unlockForConfiguration() }
+        
+            let redGainVal = 1.0 + sender.value * (videoDevice!.maxWhiteBalanceGain - 1.0)
+            userDefaults.set("\(redGainVal)", forKey: "green_gain")
+            updateWhiteBalance()
+        } catch {
+            NSLog("error changing gain")
+        }
+    }
+    
+    @IBAction func blueSliderChanged(_ sender: UISlider) {
+        do {
+            try videoDevice?.lockForConfiguration()
+            defer { videoDevice?.unlockForConfiguration() }
+        
+            let redGainVal = 1.0 + sender.value * (videoDevice!.maxWhiteBalanceGain - 1.0)
+            userDefaults.set("\(redGainVal)", forKey: "blue_gain")
+            updateWhiteBalance()
+        } catch {
+            NSLog("error changing gain")
+        }
+    }
+    
+    private func updateWhiteBalance() {
+        do {
+            try videoDevice?.lockForConfiguration()
+            defer { videoDevice?.unlockForConfiguration() }
+            let redGain = Float(userDefaults.string(forKey: "red_gain") ?? "1.0")!
+            let greenGain = Float(userDefaults.string(forKey: "green_gain") ?? "1.0")!
+            let blueGain = Float(userDefaults.string(forKey: "blue_gain") ?? "1.0")!
+            NSLog("Setting gains \(redGain) \(greenGain) \(blueGain)")
+            let gain = AVCaptureDevice.WhiteBalanceGains(redGain: redGain, greenGain: greenGain, blueGain: blueGain)
+
+            
+            videoDevice?.setWhiteBalanceModeLocked(with: gain, completionHandler: { _ in
+                NSLog("White balance changed")
+            })
+        } catch {
+            NSLog("error changing gain")
+        }
+    }
     
     @IBAction func zoomChanged(_ sender: UISlider) {
         self.currentCrop = (1 - sender.value) * (3024.0 - 512.0) + 512.0
@@ -210,9 +276,10 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
 //                            colorTemperature = max(512.0, userDefaults.float(forKey: "color_temperature"))
 //                        }
                         
-                        let redGain = Float(userDefaults.string(forKey: "red_gain") ?? "1.0")! * 2.0
+                        let redGain = Float(userDefaults.string(forKey: "red_gain") ?? "1.0")!
                         let greenGain = Float(userDefaults.string(forKey: "green_gain") ?? "1.0")!
-                        let blueGain = Float(userDefaults.string(forKey: "blue_gain") ?? "1.0")! * 2.0
+                        let blueGain = Float(userDefaults.string(forKey: "blue_gain") ?? "1.0")!
+                        NSLog("Setting gains \(redGain) \(greenGain) \(blueGain)")
                         let gain = AVCaptureDevice.WhiteBalanceGains(redGain: redGain, greenGain: greenGain, blueGain: blueGain)
 
                         

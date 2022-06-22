@@ -161,6 +161,27 @@
                                     <action selector="zoomChanged:" destination="ntR-ZX-ZGA" eventType="valueChanged" id="Boe-IW-pbB"/>
                                 </connections>
                             </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="3YE-gn-KuI" userLabel="RedSlider">
+                                <rect key="frame" x="22" y="463" width="374" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="redSliderChanged:" destination="ntR-ZX-ZGA" eventType="valueChanged" id="jBc-Oe-DMu"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="I1J-mY-Hfy" userLabel="GreenSlider">
+                                <rect key="frame" x="21" y="513" width="374" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="greenSliderChanged:" destination="ntR-ZX-ZGA" eventType="valueChanged" id="DvL-ec-XcL"/>
+                                </connections>
+                            </slider>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tZS-l4-J3l" userLabel="BlueSlider">
+                                <rect key="frame" x="22" y="563" width="374" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="blueSliderChanged:" destination="ntR-ZX-ZGA" eventType="valueChanged" id="emu-Ye-dMt"/>
+                                </connections>
+                            </slider>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="GRI-H1-200">
                                 <rect key="frame" x="0.0" y="0.0" width="400" height="352"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -209,7 +230,10 @@
                     <navigationItem key="navigationItem" id="fJM-Cq-ywd"/>
                     <connections>
                         <outlet property="CaptureButton" destination="nWh-fj-6Vk" id="yz0-CA-3Rl"/>
+                        <outlet property="blueSlider" destination="tZS-l4-J3l" id="Y4J-25-8uM"/>
+                        <outlet property="greenSlider" destination="I1J-mY-Hfy" id="hX4-3g-7f3"/>
                         <outlet property="previewView" destination="GRI-H1-200" id="vcR-Cw-S0F"/>
+                        <outlet property="redSlider" destination="3YE-gn-KuI" id="Mal-kE-GKn"/>
                         <outlet property="zoomSlider" destination="oRj-R8-djD" id="X70-qA-hXZ"/>
                     </connections>
                 </viewController>
