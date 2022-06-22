@@ -10,7 +10,7 @@ import AVFoundation
 import UIKit
 import CoreData
 
-class SettingsController: UIViewController, UITextFieldDelegate  {
+class SettingsController: UIViewController, UITextFieldDelegate, CameraControllerDelegate  {
     @IBOutlet weak var isoTextField: UITextField!
     
     @IBOutlet weak var zoomFactorTextField: UITextField!
@@ -37,6 +37,7 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
                 
                 cameraController.modalPresentationStyle = .fullScreen
                 cameraController.calibrationModeEnabled = true
+                cameraController.delegate = self
                 present(cameraController, animated: true)
                return
            case .notDetermined: // The user has not yet been asked for camera access.
@@ -45,6 +46,8 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
                    if granted {
                     let cameraController = CameraController()
                     cameraController.modalPresentationStyle = .fullScreen
+                    cameraController.calibrationModeEnabled = true
+                    cameraController.delegate = self
                     self.present(cameraController, animated: true)
                    }
                }
@@ -140,5 +143,10 @@ class SettingsController: UIViewController, UITextFieldDelegate  {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func didCaptureImage(photoOutput: Data?, cropSize: Float) {
+        self.userDefaults.set(cropSize, forKey: "current_crop")
+        zoomFactorTextField.text = "\(cropSize)"
     }
 }

@@ -35,10 +35,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if self.visionModule == nil {
             if let filePath = userDefaults.object(forKey: "currentModel") {
                 NSLog("loading extracted model at \(filePath)")
-                let finalModelFilePath = "\(filePath as! String)/model.pt"
-                let fileManager = FileManager.default
+                let filemgr = FileManager.default
+                let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+                let docURL = dirPaths[0]
+                let finalModelFilePath = "\(docURL.path)/\(filePath as! String)/model.pt"
                 
-                if (!fileManager.fileExists(atPath: finalModelFilePath)) {
+                if (!filemgr.fileExists(atPath: finalModelFilePath)) {
                     fatalError("Model does not exist at \(finalModelFilePath)")
                 }
                                
@@ -58,7 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let currentPhoneModel = UIDevice.current.type.rawValue
         NSLog("Phone model \"\(currentPhoneModel)\"")
-        let currentSettings =  userDefaults.object(forKey: "current_phone_settings")
+        let currentPhoneSettings =  userDefaults.object(forKey: "current_phone_settings")
     
         NSLog("Setup initial settings")
         let modelPath = userDefaults.object(forKey: "currentModel")
@@ -67,36 +69,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("Setting up initial model")
             DispatchQueue.global(qos: .default).async {
                 if let modelPath = ModelUtility.installDefaultModel() {
-                    NSLog("Model is at \(modelPath.path)")
-                    self.userDefaults.set(modelPath.path.replacingOccurrences(of: "file://", with: ""), forKey: "currentModel")
+                    
+                    let filemgr = FileManager.default
+                    let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+                    let docURL = dirPaths[0]
+                    let modelRelativePath = modelPath.path.replacingOccurrences(of: "\(docURL.path)/", with: "")
+                    NSLog("Model is at \(modelRelativePath)")
+                    self.userDefaults.set(modelRelativePath, forKey: "currentModel")
                 }
             }
         }
-        
+        if currentPhoneSettings == nil {
         if let filePath = Bundle.main.path(forResource: "phone_settings", ofType: "json") {
             do {
 
-            let jsonString = try String(contentsOfFile: filePath)
-                self.userDefaults.set(jsonString, forKey: "current_phone_settings")
-                let phoneSettings = try JSONDecoder().decode([PhoneSettings].self, from: jsonString.data(using: .utf8)!)
-                
-                if let applicableSettings = phoneSettings.first(where: { (phoneSettings) -> Bool in
-                                    phoneSettings.id == currentPhoneModel
+                    let jsonString = try String(contentsOfFile: filePath)
+                    self.userDefaults.set(jsonString, forKey: "current_phone_settings")
+                    let phoneSettings = try JSONDecoder().decode([PhoneSettings].self, from: jsonString.data(using: .utf8)!)
+                    
+                    if let applicableSettings = phoneSettings.first(where: { (phoneSettings) -> Bool in
+                                        phoneSettings.id == currentPhoneModel
+                        }
+                    ) {
+                        NSLog("Found setting for \(currentPhoneModel) using cropFactor \(applicableSettings.cropFactor)")
+                        settingWithDefault(key: "current_crop", value: applicableSettings.cropFactor, defval: "512.0")
+                        settingWithDefault(key: "red_gain", value: applicableSettings.redGain, defval: "1.0")
+                        settingWithDefault(key: "blue_gain", value: applicableSettings.blueGain, defval: "1.0")
+                        settingWithDefault(key: "green_gain", value: applicableSettings.greeGain, defval: "1.0")
+                        settingWithDefault(key: "iso", value: applicableSettings.iso, defval: "200")
+                        settingWithDefault(key: "exposure_duration", value: applicableSettings.exposureDuration, defval: "1")
                     }
-                ) {
-                    NSLog("Found setting for \(currentPhoneModel) using cropFactor \(applicableSettings.cropFactor)")
-                    settingWithDefault(key: "current_crop", value: applicableSettings.cropFactor, defval: "1.0")
-                    settingWithDefault(key: "red_gain", value: applicableSettings.redGain, defval: "1.0")
-                    settingWithDefault(key: "blue_gain", value: applicableSettings.blueGain, defval: "1.0")
-                    settingWithDefault(key: "green_gain", value: applicableSettings.greeGain, defval: "1.0")
-                    settingWithDefault(key: "iso", value: applicableSettings.iso, defval: "200")
-                    settingWithDefault(key: "exposure_duration", value: applicableSettings.exposureDuration, defval: "1")
-                }
+
             } catch {
                 
             }
+        } else {
+            self.userDefaults.set( "512.0", forKey: "current_crop")
+            self.userDefaults.set( "1.0", forKey: "red_gain")
+            self.userDefaults.set( "1.0", forKey: "blue_gain")
+            self.userDefaults.set( "1.0", forKey: "green_gain")
         }
-//        }
+    }
         
         return true
     }

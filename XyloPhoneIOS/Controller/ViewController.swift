@@ -175,11 +175,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let newCropWidth = CGFloat(cropSize);
             let newCropHeight = CGFloat(cropSize);
             NSLog("Square size: \(cropSize)")
-            let x = image.size.width / 2.0 - newCropWidth/2.0;
-            let y = image.size.height / 2.0 - newCropHeight/2.0;
+            let x = image.size.height / 2.0 - newCropWidth/2.0;
+            let y = image.size.width / 2.0 - newCropHeight/2.0;
             let cropRect = CGRect(x: x, y: y, width: newCropWidth, height: newCropHeight);
             let imageRef = image.cgImage!.cropping(to: cropRect)
-            return UIImage.init(cgImage: imageRef!, scale: 1.0, orientation: .right)
+        return UIImage.init(cgImage: imageRef!, scale: 1.0, orientation: .right)
     }
     
     private func process(photoOutput: Data?, cropSize: Float) -> (UIImage?, [InferenceResult]) {
@@ -235,7 +235,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 inferenceLog.score = score
                 try inferenceLog.labels = String(data: JSONEncoder().encode(labels), encoding: .utf8)
                 try context.save()
-                self.inferenceLogs.append(inferenceLog)
+                self.inferenceLogs = self.loadInferenceLogs()
                 
                 DispatchQueue.main.async {
                     self.inferenceLogTableView.reloadData()
