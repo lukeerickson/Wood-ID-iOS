@@ -11,14 +11,20 @@ class ImagePredictor: Predictor {
 //        }
 //    }()
 
-    private var labels: [String] = {
-        if let filePath = Bundle.main.path(forResource: "class_labels", ofType: "txt"),
-            let labels = try? String(contentsOfFile: filePath) {
-            return labels.components(separatedBy: "\n")
-        } else {
-            fatalError("Label file was not found.")
+    func getLabels() -> [String] {
+        let userDefaults = UserDefaults()
+        if let filePath = userDefaults.object(forKey: "currentModel") {
+            NSLog("loading extracted model at \(filePath)")
+            let filemgr = FileManager.default
+            let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
+            let docURL = dirPaths[0]
+            let classLabelsPath = docURL.appendingPathComponent(filePath as! String).appendingPathComponent("labels.txt")
+            if let labels = try? Data(contentsOf: classLabelsPath) {
+                return String(data: labels, encoding: .utf8)!.components(separatedBy: "\n")
+            }
         }
-    }()
+        return []
+    }
 
     func predict(_ buffer: [Float32], resultCount: Int) throws -> ([InferenceResult], Double, [String])? {
         if isRunning {
@@ -30,6 +36,7 @@ class ImagePredictor: Predictor {
  
         if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
             if let module = currentAppDelegate.getTorchVisionModule() {
+                let labels =  getLabels()
                 guard let outputs = module.predictImage(UnsafeMutableRawPointer(&tensorBuffer)
                                                         , size: Int32(labels.count)) else {
                     throw PredictorError.invalidInputTensor
@@ -49,6 +56,7 @@ class ImagePredictor: Predictor {
     }
     
     func classLabels() -> ([String]) {
+        let labels =  getLabels()
         return labels.filter { (val) -> Bool in
             !val.isEmpty
         }

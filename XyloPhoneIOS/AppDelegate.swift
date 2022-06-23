@@ -56,6 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return self.visionModule
     }
     
+    func resetVisionModule() {
+        self.visionModule = nil
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let currentPhoneModel = UIDevice.current.type.rawValue
@@ -68,14 +72,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if modelPath == nil {
             NSLog("Setting up initial model")
             DispatchQueue.global(qos: .default).async {
-                if let modelPath = ModelUtility.installDefaultModel() {
-                    
-                    let filemgr = FileManager.default
-                    let dirPaths = filemgr.urls(for: .documentDirectory, in: .userDomainMask)
-                    let docURL = dirPaths[0]
-                    let modelRelativePath = modelPath.path.replacingOccurrences(of: "\(docURL.path)/", with: "")
-                    NSLog("Model is at \(modelRelativePath)")
-                    self.userDefaults.set(modelRelativePath, forKey: "currentModel")
+                if let modelDetails = ModelUtility.installDefaultModel() {
+                    ModelUtility.registerModel(userDefaults: self.userDefaults, modelDetails: modelDetails)
                 }
             }
         }

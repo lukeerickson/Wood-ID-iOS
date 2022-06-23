@@ -10,7 +10,7 @@ import AVFoundation
 import UIKit
 import CoreData
 
-class SettingsController: UIViewController, UITextFieldDelegate, CameraControllerDelegate  {
+class SettingsController: UIViewController, UITextFieldDelegate, CameraControllerDelegate, UIDocumentPickerDelegate  {
     @IBOutlet weak var isoTextField: UITextField!
     
     @IBOutlet weak var zoomFactorTextField: UITextField!
@@ -22,6 +22,10 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
     @IBOutlet weak var greenGainTextField: UITextField!
     
     @IBOutlet weak var blueGainTextField: UITextField!
+    
+    @IBOutlet weak var modelVersion: UILabel!
+    
+    @IBOutlet weak var modelDescription: UILabel!
     
     private let userDefaults = UserDefaults()
     
@@ -74,6 +78,8 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
         redGainTextField.text = self.userDefaults.string(forKey: "red_gain")
         blueGainTextField.text = self.userDefaults.string(forKey: "blue_gain")
         greenGainTextField.text = self.userDefaults.string(forKey: "green_gain")
+        modelVersion.text = self.userDefaults.string(forKey: "modelVersion")
+        modelDescription.text = self.userDefaults.string(forKey: "modelDescription")
         zoomFactorTextField.delegate = self
         shutterSpeedTextField.delegate = self
         isoTextField.delegate = self
@@ -140,6 +146,16 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
         self.dismiss(animated: true)
     }
     
+    @IBAction func updateModelPicker(_ sender: Any) {
+        let types = UTType.types(tag: "zip",
+                                     tagClass: UTTagClass.filenameExtension,
+                                     conformingTo: nil)
+            let documentPickerController = UIDocumentPickerViewController(
+                    forOpeningContentTypes: types)
+            documentPickerController.delegate = self
+            self.present(documentPickerController, animated: true, completion: nil)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
@@ -148,5 +164,40 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
     func didCaptureImage(photoOutput: Data?, cropSize: Float) {
         self.userDefaults.set(cropSize, forKey: "current_crop")
         zoomFactorTextField.text = "\(cropSize)"
+        redGainTextField.text = self.userDefaults.string(forKey: "red_gain")
+        blueGainTextField.text = self.userDefaults.string(forKey: "blue_gain")
+        greenGainTextField.text = self.userDefaults.string(forKey: "green_gain")
+    }
+    
+    public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        guard let myURL = urls.first else {
+            return
+        }
+        print("import result : \(myURL.absoluteString)")
+
+        DispatchQueue.global(qos: .default).async {
+            if (myURL.startAccessingSecurityScopedResource()) {
+                defer {myURL.stopAccessingSecurityScopedResource()}
+                if let modelDetails = ModelUtility.installModelFrom(filePath: myURL) {
+                   ModelUtility.registerModel(userDefaults: self.userDefaults, modelDetails: modelDetails)
+                    if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
+                        currentAppDelegate.resetVisionModule();
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.modelVersion.text = self.userDefaults.string(forKey: "modelVersion")
+                        self.modelDescription.text = self.userDefaults.string(forKey: "modelDescription")
+                    }
+                }
+            
+            } else {
+                NSLog("Unable to access resource \(myURL)")
+            }
+        }
+    }
+
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("view was cancelled")
+        dismiss(animated: true, completion: nil)
     }
 }

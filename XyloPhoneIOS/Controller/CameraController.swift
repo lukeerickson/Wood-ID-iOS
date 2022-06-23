@@ -77,8 +77,8 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             try videoDevice?.lockForConfiguration()
             defer { videoDevice?.unlockForConfiguration() }
         
-            let redGainVal = 1.0 + sender.value * (videoDevice!.maxWhiteBalanceGain - 1.0)
-            userDefaults.set("\(redGainVal)", forKey: "green_gain")
+            let greenGainVal = 1.0 + sender.value * (videoDevice!.maxWhiteBalanceGain - 1.0)
+            userDefaults.set("\(greenGainVal)", forKey: "green_gain")
             updateWhiteBalance()
         } catch {
             NSLog("error changing gain")
