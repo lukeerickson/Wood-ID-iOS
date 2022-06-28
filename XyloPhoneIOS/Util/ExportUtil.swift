@@ -10,7 +10,7 @@ import CoreData
 
 
 struct ExportUtil {
-    static func exportToCSV(context: NSManagedObjectContext) {
+    static func exportToCSV(context: NSManagedObjectContext, label: String) -> URL? {
         let fetchRequest: NSFetchRequest<InferenceLogEntity> = InferenceLogEntity.fetchRequest()
         let sort = NSSortDescriptor(key: #keyPath(InferenceLogEntity.timestamp), ascending: false)
         fetchRequest.sortDescriptors = [sort]
@@ -19,9 +19,8 @@ struct ExportUtil {
             let fileManager = FileManager.default
                     do {
                         let path = try fileManager.url(for: .documentDirectory, in: .allDomainsMask, appropriateFor: nil, create: false)
-                        let formatter = DateFormatter()
 
-                        let rootExtract = path.appendingPathComponent("exported_\(formatter.string(from: Date()))")
+                        let rootExtract = path.appendingPathComponent("exported_\(label)")
                         if !FileManager.default.fileExists(atPath: rootExtract.path) {
                             do {
                                 try FileManager.default.createDirectory(atPath: rootExtract.path, withIntermediateDirectories: true, attributes: nil)
@@ -32,11 +31,10 @@ struct ExportUtil {
                         
                         NSLog("Extracting to path \(rootExtract)")
                         
-                        let csvFile = rootExtract.appendingPathComponent("export.csv")
-                        
-                        let headers = "uid,first_name,last_name,timestamp,class,img,lat,long,location,model_name,version,correction,comment\n"
-                        try headers.write(to: csvFile, atomically: true, encoding: .utf8)
-                        
+                        let csvFile = rootExtract.appendingPathComponent("wood_id_export_\(label).csv")
+                        var csvRows = [String]()
+                        let headers = "uid,timestamp,prediction_label_1,img,score,scores,model_name";
+                        csvRows.append(headers)
                         try results.forEach( { (body:  InferenceLogEntity) in
                             let imageFolderPath = rootExtract.appendingPathComponent(body.classLabel!)
                             if !FileManager.default.fileExists(atPath: imageFolderPath.path) {
@@ -46,17 +44,18 @@ struct ExportUtil {
                                     print(error.localizedDescription)
                                 }
                             }
-                            
 
                             if let image = body.image {
-                                let imagename = imageFolderPath.appendingPathComponent("\(body.uid).jpg")
+                                let imagename = imageFolderPath.appendingPathComponent("\(body.uid!).jpg")
                                 try image.write(to: imagename)
-                                let csvString = "\(body.uid),,,\(body.timestamp),\(body.classLabel),\(imagename.absoluteString),,,,,"
-                                try csvString.write(to: csvFile, atomically: true, encoding: .utf8)
+                                let relativeImagePath = imagename.absoluteString.replacingOccurrences(of: "\(rootExtract.absoluteString)/", with: "")
+                                let csvString = "\(body.uid!),\(body.timestamp!),\(body.classLabel!),\(relativeImagePath),\(body.score),\(body.scores),\(body.modelVersion)\n"
+                                csvRows.append(csvString)
                             }
-                            
-
                         })
+                        
+                        try csvRows.joined(separator: "\n").write(to: csvFile, atomically: true, encoding: .utf8)
+                        return rootExtract
                     } catch {
                         print("error creating file")
                     }
@@ -64,5 +63,6 @@ struct ExportUtil {
         catch {
             debugPrint(error)
         }
+        return nil
     }
 }

@@ -2,14 +2,6 @@ import UIKit
 
 class ImagePredictor: Predictor {
     private var isRunning: Bool = false
-//    private lazy var module: VisionTorchModule = {
-//        if let filePath = Bundle.main.path(forResource: "fips_wood_model_mobile", ofType: "pt"),
-//            let module = VisionTorchModule(fileAtPath: filePath) {
-//            return module
-//        } else {
-//            fatalError("Failed to load model!")
-//        }
-//    }()
 
     func getLabels() -> [String] {
         let userDefaults = UserDefaults()
@@ -26,7 +18,7 @@ class ImagePredictor: Predictor {
         return []
     }
 
-    func predict(_ buffer: [Float32], resultCount: Int) throws -> ([InferenceResult], Double, [String])? {
+    func predict(_ buffer: [Float32], resultCount: Int) throws -> ([InferenceResult], Double, [String], [Float])? {
         if isRunning {
             return nil
         }
@@ -48,11 +40,15 @@ class ImagePredictor: Predictor {
                 for x in 0..<outputs.count {
                     NSLog("\(labels[x]) -> \(outputs[x].floatValue)")
                 }
+                let model_scores = outputs.map { x in
+                    x.floatValue
+                }
+                
                 let results = topK(scores: outputs, labels: labels, count: resultCount)
-                return (results, inferenceTime, labels)
+                return (results, inferenceTime, labels, model_scores)
             }
         }
-        return ([], 0.0, [])
+        return ([], 0.0, [], [])
     }
     
     func classLabels() -> ([String]) {

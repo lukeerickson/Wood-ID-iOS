@@ -32,6 +32,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var inferenceLogTableView: UITableView!
     var mainContext = CoreDataManager.shared.mainContext
     var inferenceLogs: [InferenceLogEntity] = []
+    let userDefaults = UserDefaults()
     
     
     var windowOrientation: UIInterfaceOrientation {
@@ -104,9 +105,56 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
         
+    @IBOutlet weak var exportButton: UIButton!
+    
+    
+    // Create the CSV and export the file
     @IBAction func processExport(_ sender: Any) {
         NSLog("export button pressed!")
-        ExportUtil.exportToCSV(context: mainContext)
+        exportButton.isEnabled = false
+        DispatchQueue.global().async {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyyMMddHHmmss"
+            let timestamp = formatter.string(from: Date())
+            
+            if let exportFileDir = ExportUtil.exportToCSV(context: self.mainContext, label: timestamp) {
+                // this will hold the URL of the zip file
+                var archiveUrl: URL?
+                // if we encounter an error, store it here
+                var error: NSError?
+
+                let coordinator = NSFileCoordinator()
+                
+                let fm = FileManager.default
+                
+                // zip up the documents directory
+                // this method is synchronous and the block will be executed before it returns
+                // if the method fails, the block will not be executed though
+                // if you expect the archiving process to take long, execute it on another queue
+                coordinator.coordinate(readingItemAt: exportFileDir, options: [.forUploading], error: &error) { (zipUrl) in
+                    // zipUrl points to the zip file created by the coordinator
+                    // zipUrl is valid only until the end of this block, so we move the file to a temporary folder
+                    let tmpUrl = try! fm.url(
+                        for: .itemReplacementDirectory,
+                        in: .userDomainMask,
+                        appropriateFor: zipUrl,
+                        create: true
+                    ).appendingPathComponent("wood_id_export_\(timestamp).zip")
+                    try! fm.moveItem(at: zipUrl, to: tmpUrl)
+
+                    // store the URL so we can use it outside the block
+                    archiveUrl = tmpUrl
+                }
+
+                DispatchQueue.main.async {
+                    let activityViewController = UIActivityViewController(activityItems: [archiveUrl!], applicationActivities: nil)
+                    self.exportButton.isEnabled = true
+                    self.present(activityViewController, animated: true, completion: nil)
+                }
+            } else {
+                NSLog("No file generated")
+            }
+        }
     }
     
     @IBAction func selectImage(_ sender: Any) {
@@ -194,12 +242,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if let outputs = try? module.predict(pixelBuffer, resultCount: labels.count) {
             NSLog("Inference done")
             let result = outputs.0.first!
-            saveInferenceLog(className: result.label, image: resizedImage.pngData()!, score: result.score, labels: labels, topk: outputs.0)
+            saveInferenceLog(className: result.label, image: resizedImage.pngData()!, score: result.score, labels: labels, topk: outputs.0, scores: outputs.3)
             return (resizedImage, outputs.0)
         } else {
             return (nil, [])
         }
-
     }
     
     func loadInferenceLogs() -> [InferenceLogEntity] {
@@ -216,8 +263,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return []
     }
 
-    func saveInferenceLog(className: String, image: Data, score: Float, labels: [String], topk: [InferenceResult]) {
+    func saveInferenceLog(className: String, image: Data, score: Float, labels: [String], topk: [InferenceResult], scores: [Float]) {
         let context = CoreDataManager.shared.backgroundContext()
+        let modelVersion = userDefaults.string(forKey: "modelVersion")
+
         context.perform {
             NSLog("Saving inference log")
             let entity = InferenceLogEntity.entity()
@@ -226,6 +275,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             inferenceLog.classLabel = className
             inferenceLog.image = image
             inferenceLog.timestamp = Date()
+            inferenceLog.modelVersion = modelVersion
+            
+            inferenceLog.scores = scores.map {
+                s in
+                String(describing: s)
+            }.joined(separator: "|")
             let topKArr = topk.map { (result) -> TopKPair in
                 TopKPair(classLabel: result.label, score: String(describing: result.score))
             }
