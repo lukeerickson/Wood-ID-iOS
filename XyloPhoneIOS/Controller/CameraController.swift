@@ -138,7 +138,6 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
             if self.videoDeviceInput.device.isFlashAvailable {
                 photoSettings.flashMode = .off
             }
-            
 
             photoSettings.isHighResolutionPhotoEnabled = true
             photoSettings.photoQualityPrioritization = .quality
@@ -181,6 +180,8 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     override func viewDidLoad() {
         super.viewDidLoad()
         var savedCrop: Float32 = 735.0
+
+        
         if (userDefaults.object(forKey: "current_crop") != nil) {
             savedCrop = max(512.0, userDefaults.float(forKey: "current_crop"))
         }
@@ -189,6 +190,8 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         self.currentCrop = savedCrop
         zoomSlider.value = 1 - (currentCrop - 512.0) / (3024.0 - 512.0)
         // Do any additional setup after loading the view
+        
+        
         AppUtility.lockOrientation(.portrait)
     }
     
@@ -226,6 +229,18 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         }
     }
     
+    private func setGainValues(device: AVCaptureDevice) {
+        let gainRange = device.maxWhiteBalanceGain - 1.0
+        let redGain = (Float(userDefaults.string(forKey: "red_gain") ?? "1.0")! - 1.0) / gainRange
+        let blueGain = (Float(userDefaults.string(forKey: "blue_gain") ?? "1.0")! - 1.0) / gainRange
+        let greenGain = (Float(userDefaults.string(forKey: "green_gain") ?? "1.0")! - 1.0) / gainRange
+        DispatchQueue.main.async {
+            self.redSlider.value = redGain
+            self.blueSlider.value = blueGain
+            self.greenSlider.value = greenGain
+        }
+    }
+    
     private func configureSession() {
         session.beginConfiguration()
         session.sessionPreset = .photo
@@ -253,6 +268,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                 return
             }
             
+            setGainValues(device: defaultVideoDevice!)
             
             NSLog("camera \(defaultVideoDevice.debugDescription)")
             NSLog("Current format: %@, min zoom factor: %f, max zoom factor: %f", videoDevice.activeFormat,

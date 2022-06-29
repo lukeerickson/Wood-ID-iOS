@@ -89,10 +89,6 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
         AppUtility.lockOrientation(.portrait)
     }
     
-    var windowOrientation: UIInterfaceOrientation {
-        return view.window?.windowScene?.interfaceOrientation ?? .unknown
-    }
-    
     @IBAction func clearAllData(_ sender: Any) {
         let refreshAlert = UIAlertController(title: "Delete All", message: "All data will be lost. Are you sure you want to continue", preferredStyle: UIAlertController.Style.alert)
 

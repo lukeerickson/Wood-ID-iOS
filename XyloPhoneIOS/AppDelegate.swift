@@ -13,7 +13,7 @@ struct PhoneSettings: Decodable {
     let cropFactor: String
     let redGain: String?
     let blueGain: String?
-    let greeGain: String?
+    let greenGain: String?
     let exposureDuration: String?
     let iso: String?
 }
@@ -93,9 +93,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         settingWithDefault(key: "current_crop", value: applicableSettings.cropFactor, defval: "512.0")
                         settingWithDefault(key: "red_gain", value: applicableSettings.redGain, defval: "1.0")
                         settingWithDefault(key: "blue_gain", value: applicableSettings.blueGain, defval: "1.0")
-                        settingWithDefault(key: "green_gain", value: applicableSettings.greeGain, defval: "1.0")
+                        settingWithDefault(key: "green_gain", value: applicableSettings.greenGain, defval: "1.0")
                         settingWithDefault(key: "iso", value: applicableSettings.iso, defval: "200")
                         settingWithDefault(key: "exposure_duration", value: applicableSettings.exposureDuration, defval: "1")
+                    } else {
+                        NSLog("No settings found for \(currentPhoneModel)")
                     }
 
             } catch {
@@ -127,7 +129,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     /// set orientations you want to be allowed in this property by default
-    var orientationLock = UIInterfaceOrientationMask.all
+    var orientationLock = UIInterfaceOrientationMask.portrait
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return self.orientationLock

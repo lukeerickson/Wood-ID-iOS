@@ -49,7 +49,7 @@ struct ExportUtil {
                                 let imagename = imageFolderPath.appendingPathComponent("\(body.uid!).jpg")
                                 try image.write(to: imagename)
                                 let relativeImagePath = imagename.absoluteString.replacingOccurrences(of: "\(rootExtract.absoluteString)/", with: "")
-                                let csvString = "\(body.uid!),\(body.timestamp!),\(body.classLabel!),\(relativeImagePath),\(body.score),\(body.scores),\(body.modelVersion)\n"
+                                let csvString = "\(body.uid!),\(body.timestamp!),\(body.classLabel!),\(relativeImagePath),\(body.score),\(body.scores!),\(body.modelVersion!)"
                                 csvRows.append(csvString)
                             }
                         })

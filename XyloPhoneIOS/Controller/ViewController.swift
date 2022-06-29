@@ -34,11 +34,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var inferenceLogs: [InferenceLogEntity] = []
     let userDefaults = UserDefaults()
     
-    
-    var windowOrientation: UIInterfaceOrientation {
-        return view.window?.windowScene?.interfaceOrientation ?? .unknown
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         inferenceLogTableView.delegate = self
