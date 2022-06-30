@@ -11,7 +11,7 @@
    {
        "id" : "iPhone SE 2nd gen",
        "cropFactor" : "776.42",
-       "greenGain" : "1.0",
+       "greenGain" : "1.68",
        "redGain" : "3.059",
        "blueGain" : "3.13",
        "exposureDuration" : "1",
