@@ -34,10 +34,10 @@
 		60B9C74E27AD38B9009D27EF /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B9C74D27AD38B9009D27EF /* SettingsController.swift */; };
 		60CD6DDC26F1872E00573106 /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */; };
 		60D45AD727A9428100D69295 /* AppUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D45AD627A9428100D69295 /* AppUtil.swift */; };
+		65370CE228869988007037A9 /* ZIPFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65370CE128869988007037A9 /* ZIPFoundation.framework */; };
 		653D8B7527F0B88E000F4F9B /* DetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653D8B7427F0B88E000F4F9B /* DetailsController.swift */; };
 		6568AD1527F9596800550FCE /* phone_settings.json in Resources */ = {isa = PBXBuildFile; fileRef = 6568AD1427F9596800550FCE /* phone_settings.json */; };
 		6568AD1827F95BFB00550FCE /* class_labels.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6568AD1627F95BFB00550FCE /* class_labels.txt */; };
-		6568AD1927F95BFB00550FCE /* fips_wood_model_mobile.pt in Resources */ = {isa = PBXBuildFile; fileRef = 6568AD1727F95BFB00550FCE /* fips_wood_model_mobile.pt */; };
 		6568AD1B27FADEA100550FCE /* TopkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6568AD1A27FADEA000550FCE /* TopkCell.swift */; };
 		6589ECA627E81B9800CC1689 /* InferenceLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589ECA527E81B9800CC1689 /* InferenceLogCell.swift */; };
 		65A22FD328018AAB00965BC3 /* ModelInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A22FD228018AAB00965BC3 /* ModelInstaller.swift */; };
@@ -100,10 +100,10 @@
 		60B9C74D27AD38B9009D27EF /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		60CD6DDB26F1872E00573106 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		60D45AD627A9428100D69295 /* AppUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtil.swift; sourceTree = "<group>"; };
+		65370CE128869988007037A9 /* ZIPFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ZIPFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		653D8B7427F0B88E000F4F9B /* DetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsController.swift; sourceTree = "<group>"; };
 		6568AD1427F9596800550FCE /* phone_settings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = phone_settings.json; sourceTree = "<group>"; };
 		6568AD1627F95BFB00550FCE /* class_labels.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = class_labels.txt; sourceTree = "<group>"; };
-		6568AD1727F95BFB00550FCE /* fips_wood_model_mobile.pt */ = {isa = PBXFileReference; lastKnownFileType = file; path = fips_wood_model_mobile.pt; sourceTree = "<group>"; };
 		6568AD1A27FADEA000550FCE /* TopkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopkCell.swift; sourceTree = "<group>"; };
 		6589ECA527E81B9800CC1689 /* InferenceLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceLogCell.swift; sourceTree = "<group>"; };
 		65A22FD228018AAB00965BC3 /* ModelInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelInstaller.swift; sourceTree = "<group>"; };
@@ -117,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65370CE228869988007037A9 /* ZIPFoundation.framework in Frameworks */,
 				26590E75F62383A8296A01FF /* Pods_XyloPhoneIOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -152,7 +153,6 @@
 			children = (
 				65A22FD42801977800965BC3 /* model.zip */,
 				6568AD1627F95BFB00550FCE /* class_labels.txt */,
-				6568AD1727F95BFB00550FCE /* fips_wood_model_mobile.pt */,
 				6046C07A279400C2000BF5CC /* model.json */,
 				6046C07C279400C2000BF5CC /* model.txt */,
 				6046C07D279400C2000BF5CC /* species_database.json */,
@@ -255,6 +255,7 @@
 		6086674117F2C28EB6BCA482 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				65370CE128869988007037A9 /* ZIPFoundation.framework */,
 				00B77E3348B57ED891DB3F22 /* Pods_XyloPhoneIOS.framework */,
 			);
 			name = Frameworks;
@@ -386,7 +387,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6568AD1927F95BFB00550FCE /* fips_wood_model_mobile.pt in Resources */,
 				6046C08F27952F4E000BF5CC /* model.json in Resources */,
 				6046C09127952F4E000BF5CC /* model.txt in Resources */,
 				6568AD1827F95BFB00550FCE /* class_labels.txt in Resources */,

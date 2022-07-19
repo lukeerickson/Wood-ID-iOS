@@ -24,15 +24,20 @@ class ImagePredictor: Predictor {
         }
         isRunning = true
         let startTime = CACurrentMediaTime()
-        var tensorBuffer = buffer;
  
         if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
             if let module = currentAppDelegate.getTorchVisionModule() {
                 let labels =  getLabels()
-                guard let outputs = module.predictImage(UnsafeMutableRawPointer(&tensorBuffer)
+                
+                let copiedBufferPtr = UnsafeMutablePointer<Float>.allocate(capacity: buffer.count)
+                      copiedBufferPtr.initialize(from: buffer, count: buffer.count)
+                
+                guard let outputs = module.predictImage(copiedBufferPtr
                                                         , size: Int32(labels.count)) else {
+                    copiedBufferPtr.deallocate()
                     throw PredictorError.invalidInputTensor
                 }
+                copiedBufferPtr.deallocate()
                 isRunning = false
                 NSLog("Number of outputs \(outputs.count)")
                 NSLog("Number of classes \(labels.count)")
