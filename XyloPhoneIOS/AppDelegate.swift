@@ -22,6 +22,7 @@ struct PhoneSettings: Decodable {
 class AppDelegate: UIResponder, UIApplicationDelegate {
     private let userDefaults = UserDefaults()
     private var visionModule: VisionTorchModule?
+    private var speciesLookup: SpeciesUtil?
     
     fileprivate func settingWithDefault(key: String, value: String?, defval: String) {
         if let settingval =  value {
@@ -29,6 +30,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             self.userDefaults.set(defval, forKey: key)
         }
+    }
+    
+    func getSpeciesDatabase() -> SpeciesUtil? {
+        if (self.speciesLookup == nil) {
+            if let filePath = userDefaults.object(forKey: "currentModel") {
+                NSLog("loading extracted model at \(filePath)")
+                speciesLookup = SpeciesUtil(userDefaults: userDefaults)
+                speciesLookup?.loadDatabase()
+            }
+        }
+        return speciesLookup
     }
     
     func getTorchVisionModule() -> VisionTorchModule? {
@@ -48,6 +60,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.visionModule = module
                     return module
                 }
+                
+                speciesLookup = SpeciesUtil(userDefaults: userDefaults)
+                speciesLookup?.loadDatabase()
+                
             } else {
                 fatalError("Failed to load model!")
             }
@@ -58,6 +74,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func resetVisionModule() {
         self.visionModule = nil
+    }
+    
+    fileprivate func applyDefaultSettings() {
+        self.userDefaults.set( "512.0", forKey: "current_crop")
+        self.userDefaults.set( "1.0", forKey: "red_gain")
+        self.userDefaults.set( "1.0", forKey: "blue_gain")
+        self.userDefaults.set( "1.0", forKey: "green_gain")
+        self.userDefaults.set( "200", forKey: "iso")
+        self.userDefaults.set("1", forKey: "exposure_duration")
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -98,16 +123,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         settingWithDefault(key: "exposure_duration", value: applicableSettings.exposureDuration, defval: "1")
                     } else {
                         NSLog("No settings found for \(currentPhoneModel)")
+                        applyDefaultSettings()
                     }
 
             } catch {
                 
             }
         } else {
-            self.userDefaults.set( "512.0", forKey: "current_crop")
-            self.userDefaults.set( "1.0", forKey: "red_gain")
-            self.userDefaults.set( "1.0", forKey: "blue_gain")
-            self.userDefaults.set( "1.0", forKey: "green_gain")
+            applyDefaultSettings()
         }
     }
         

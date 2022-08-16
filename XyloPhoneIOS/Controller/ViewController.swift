@@ -26,21 +26,38 @@ extension UIViewController {
     }
 }
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraControllerDelegate {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraControllerDelegate,
+                      UIDocumentPickerDelegate {
+    
     @IBOutlet weak var identificationlabel: UILabel!
 
+    @IBOutlet weak var browseButton: UIButton!
     @IBOutlet weak var inferenceLogTableView: UITableView!
     var mainContext = CoreDataManager.shared.mainContext
     var inferenceLogs: [InferenceLogEntity] = []
     let userDefaults = UserDefaults()
+    var speciesDatabase: SpeciesUtil?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         inferenceLogTableView.delegate = self
         inferenceLogTableView.dataSource = self
         AppUtility.lockOrientation(.portrait)
+        browseButton.setTitle("", for: .normal)
         // Do any additional setup after loading the view.
-        self.inferenceLogs = loadInferenceLogs()
+        
+        if (speciesDatabase == nil) {
+            DispatchQueue.global().async {
+                if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
+                    self.speciesDatabase = currentAppDelegate.getSpeciesDatabase();
+                    DispatchQueue.main.async {
+                        self.inferenceLogs = self.loadInferenceLogs()
+                    }
+                }
+            }
+        } else {
+            self.inferenceLogs = loadInferenceLogs()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,6 +65,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.inferenceLogs = loadInferenceLogs()
         inferenceLogTableView.reloadData()
     }
+    
+    
+    
+    @IBAction func browseButton(_ sender: Any) {
+        NSLog("select Image!")
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = UIImagePickerController.SourceType.photoLibrary
+        imagePickerController.delegate = self
+        imagePickerController.mediaTypes = ["public.image"]
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    
     @IBAction func openCamera(_ sender: Any) {
         NSLog("Open camera")
     }
@@ -60,6 +90,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 DispatchQueue.main.async {
                     let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
                     cameraController.delegate = self
+                    cameraController.cameraIndex = self.userDefaults.integer(forKey: "camera_index")
                     cameraController.modalPresentationStyle = .fullScreen
                     self.present(cameraController, animated: true)
                 }
@@ -73,6 +104,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
 
                         cameraController.modalPresentationStyle = .fullScreen
+                        cameraController.cameraIndex = self.userDefaults.integer(forKey: "camera_index")
                         cameraController.delegate = self
                         self.present(cameraController, animated: true)
                        }
@@ -153,12 +185,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func selectImage(_ sender: Any) {
-        NSLog("select Image!")
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.sourceType = UIImagePickerController.SourceType.photoLibrary
-        imagePickerController.delegate = self
-        imagePickerController.mediaTypes = ["public.image"]
-        present(imagePickerController, animated: true, completion: nil)
+
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -334,7 +361,9 @@ extension ViewController: UITableViewDataSource {
         let inferenceLog = inferenceLogs[indexPath.item]
         cell.controller = self
         cell.inferenceLog = inferenceLog
-        cell.classLabel.text = inferenceLog.classLabel
+        if let klass = inferenceLog.classLabel {
+            cell.classLabel.text =  self.speciesDatabase?.resolveLabel(classLabel: klass) ?? klass
+        }
         if let timestamp = inferenceLog.timestamp {
             let dateFormatterGet = DateFormatter()
             dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"

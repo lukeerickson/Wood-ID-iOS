@@ -6,7 +6,8 @@
         "redGain" : "3.676",
         "blueGain" : "3.5",
         "exposureDuration" : "1",
-        "iso" : "30"
+        "iso" : "30",
+        "camera_index" : "0"
     },
    {
        "id" : "iPhone SE 2nd gen",
@@ -15,6 +16,7 @@
        "redGain" : "3.676",
        "blueGain" : "3.575",
        "exposureDuration" : "1",
-       "iso" : "50"
+       "iso" : "50",
+       "camera_index" : "0"
    }
 ]

@@ -1,0 +1,170 @@
+{
+  "acacia": {
+    "scientific_name": "Acacia",
+    "other_names": [
+      "Acacia"
+    ]
+  },
+  "acer": {
+    "scientific_name": "Acer",
+    "other_names": [
+      "Sugar Maple"
+    ]
+  },
+  "anisoptera": {
+    "scientific_name": "Anisoptera",
+    "other_names": [
+      "Anisoptera"
+    ]
+  },
+  "celtis": {
+    "scientific_name": "Celtis",
+    "other_names": [
+      "Celtis"
+    ]
+  },
+  "dalbergia": {
+    "scientific_name": "Dalbergia",
+    "other_names": [
+      "Dalbergia"
+    ]
+  },
+  "dipterocarpus": {
+    "scientific_name": "Dipterocarpus",
+    "other_names": [
+      "Apitong"
+    ]
+  },
+  "eucalyptus": {
+    "scientific_name": "Eucalyptus",
+    "other_names": [
+      "River Red Cum"
+    ]
+  },
+  "falcataria": {
+    "scientific_name": "Falcataria",
+    "other_names": [
+      "Moluccan Sau"
+    ]
+  },
+  "fraxinus": {
+    "scientific_name": "Fraxinus",
+    "other_names": [
+      "Glacial Ash"
+    ]
+  },
+  "gmelina": {
+    "scientific_name": "Gmelina",
+    "other_names": [
+      "Gmelina"
+    ]
+  },
+  "hevea": {
+    "scientific_name": "Hevea",
+    "other_names": [
+      "Rubber"
+    ]
+  },
+  "intsia": {
+    "scientific_name": "Intsia",
+    "other_names": [
+      "Ipil"
+    ]
+  },
+  "juglans": {
+    "scientific_name": "Juglans",
+    "other_names": [
+      "Walnut"
+    ]
+  },
+  "leucaena": {
+    "scientific_name": "Leucaena",
+    "other_names": [
+      "Ipil-Ipil"
+    ]
+  },
+  "parashorea": {
+    "scientific_name": "Parashorea",
+    "other_names": [
+      "Bagtikan"
+    ]
+  },
+  "pentacme": {
+    "scientific_name": "Pentacme",
+    "other_names": [
+      "Pentacme"
+    ]
+  },
+  "pinus": {
+    "scientific_name": "Pinus",
+    "other_names": [
+      "Pinus"
+    ]
+  },
+  "pometia": {
+    "scientific_name": "Pometia",
+    "other_names": [
+      "Malugai"
+    ]
+  },
+  "pterocarpus": {
+    "scientific_name": "Pterocarpus",
+    "other_names": [
+      "Narra"
+    ]
+  },
+  "quercus": {
+    "scientific_name": "Quercus",
+    "other_names": [
+      "European Oak"
+    ]
+  },
+  "samanea": {
+    "scientific_name": "Samanea",
+    "other_names": [
+      "Rain Tree"
+    ]
+  },
+  "shoreab": {
+    "scientific_name": "Shoreab",
+    "other_names": [
+      "Shorea B"
+    ]
+  },
+  "shoreadr": {
+    "scientific_name": "Shoreadr",
+    "other_names": [
+      "Dark Red Meranti"
+    ]
+  },
+  "shorealr": {
+    "scientific_name": "Shorealr",
+    "other_names": [
+      "Light Red Meranti"
+    ]
+  },
+  "shoreaw": {
+    "scientific_name": "Shoreaw",
+    "other_names": [
+      "White Lauan"
+    ]
+  },
+  "swietenia": {
+    "scientific_name": "Swietenia",
+    "other_names": [
+      "Big-leafed mahogany"
+    ]
+  },
+  "tectona": {
+    "scientific_name": "Tectona",
+    "other_names": [
+      "Teak"
+    ]
+  },
+  "vitex": {
+    "scientific_name": "Vitex",
+    "other_names": [
+      "Molave"
+    ]
+  }
+}

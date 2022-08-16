@@ -17,6 +17,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     weak var videoDevice: AVCaptureDevice?
     var currentCrop: Float = 512.0
     var calibrationModeEnabled: Bool = false
+    var cameraIndex: Int = 0
     
     private var inProgressPhotoCaptureDelegates = [Int64: PhotoCaptureProcessor]()
     
@@ -25,13 +26,16 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         self.previewView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.width)
         self.previewView.bringSubviewToFront(CaptureButton)
         self.previewView.contentMode = .scaleAspectFill
+        NSLog("calibration is \(calibrationModeEnabled)")
         if !calibrationModeEnabled {
+            
             zoomSlider.isHidden = true
             redSlider.isHidden = true
             greenSlider.isHidden = true
             blueSlider.isHidden = true
             CaptureButton.isHidden = false
         } else {
+            CaptureButton.setTitle("Close Calibration", for: .normal)
             zoomSlider.isHidden = false
             redSlider.isHidden = false
             greenSlider.isHidden = false
@@ -241,24 +245,15 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
         }
     }
     
+
+    
     private func configureSession() {
         session.beginConfiguration()
         session.sessionPreset = .photo
 
         do {
-            var defaultVideoDevice: AVCaptureDevice?
-            
-            // Choose the back dual camera, if available, otherwise default to a wide angle camera.
-            
-            if let telephotoCamera = AVCaptureDevice.default(.builtInTelephotoCamera, for: .video, position: .back) {
-                defaultVideoDevice = telephotoCamera
-            } else if let dualWideCameraDevice = AVCaptureDevice.default(.builtInDualWideCamera, for: .video, position: .back) {
-                // If a rear dual camera is not available, default to the rear dual wide camera.
-                defaultVideoDevice = dualWideCameraDevice
-            } else if let backCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
-                // If a rear dual wide camera is not available, default to the rear wide angle camera.
-                defaultVideoDevice = backCameraDevice
-            }
+            NSLog("Using camera Index: \(cameraIndex)")
+            let defaultVideoDevice: AVCaptureDevice? = AppUtility.collectAvailableCameras()[cameraIndex].1
             
             self.videoDevice = defaultVideoDevice
             
@@ -286,7 +281,7 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
 
                     if videoDevice.isWhiteBalanceModeSupported(.locked) {
                         NSLog("device type \(UIDevice().type)")
-                        var colorTemperature = Float(videoDevice.maxWhiteBalanceGain / 2)
+//                        let colorTemperature = Float(videoDevice.maxWhiteBalanceGain / 2)
                         
 //                        if (userDefaults.object(forKey: "color_temperature") != nil) {
 //                            colorTemperature = max(512.0, userDefaults.float(forKey: "color_temperature"))
@@ -295,12 +290,12 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
                         let redGain = Float(userDefaults.string(forKey: "red_gain") ?? "1.0")!
                         let greenGain = Float(userDefaults.string(forKey: "green_gain") ?? "1.0")!
                         let blueGain = Float(userDefaults.string(forKey: "blue_gain") ?? "1.0")!
-                        NSLog("Setting gains \(redGain) \(greenGain) \(blueGain)")
+                        
                         let gain = AVCaptureDevice.WhiteBalanceGains(redGain: redGain, greenGain: greenGain, blueGain: blueGain)
 
                         
                         videoDevice.setWhiteBalanceModeLocked(with: gain, completionHandler: { _ in
-                            NSLog("White balance locked \(colorTemperature)")
+                            NSLog("Setting gains \(redGain) \(greenGain) \(blueGain)")
                         })
                     }
                     

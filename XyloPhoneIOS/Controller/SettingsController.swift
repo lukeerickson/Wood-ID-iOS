@@ -10,7 +10,9 @@ import AVFoundation
 import UIKit
 import CoreData
 
-class SettingsController: UIViewController, UITextFieldDelegate, CameraControllerDelegate, UIDocumentPickerDelegate  {
+class SettingsController: UIViewController, UITextFieldDelegate, CameraControllerDelegate, UIDocumentPickerDelegate, UIPickerViewDelegate, UIPickerViewDataSource  {
+
+    
     @IBOutlet weak var isoTextField: UITextField!
     
     @IBOutlet weak var zoomFactorTextField: UITextField!
@@ -29,33 +31,36 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
     
     private let userDefaults = UserDefaults()
     
+    @IBOutlet weak var cameraSelector: UIPickerView!
     @IBOutlet weak var enableCalibrationSwitch: UISwitch!
     
     @IBOutlet weak var openRecalibrateCamera: UIButton!
     
+    fileprivate func presentCameraCalibration(_ cameraController: CameraController) {
+        cameraController.modalPresentationStyle = .fullScreen
+        cameraController.calibrationModeEnabled = true
+        cameraController.cameraIndex = cameraSelector.selectedRow(inComponent: 0)
+        cameraController.delegate = self
+        DispatchQueue.main.async {
+            self.present(cameraController, animated: true)
+        }
+    }
+    
     @IBAction func recalibrateCamera(_ sender: Any) {
+        let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
         switch AVCaptureDevice.authorizationStatus(for: AVMediaType.video) {
             case .authorized: // The user has previously granted access to the camera.
                 NSLog("Authorized?")
-                let cameraController = self.storyboard?.instantiateViewController(withIdentifier: "CameraController") as! CameraController
-                
-                cameraController.modalPresentationStyle = .fullScreen
-                cameraController.calibrationModeEnabled = true
-                cameraController.delegate = self
-                present(cameraController, animated: true)
+                presentCameraCalibration(cameraController)
                return
-           case .notDetermined: // The user has not yet been asked for camera access.
-            NSLog("Not Authorized?")
-               AVCaptureDevice.requestAccess(for: .video) { granted in
+            case .notDetermined: // The user has not yet been asked for camera access.
+                NSLog("Not Authorized?")
+                AVCaptureDevice.requestAccess(for: .video) { granted in
                    if granted {
-                    let cameraController = CameraController()
-                    cameraController.modalPresentationStyle = .fullScreen
-                    cameraController.calibrationModeEnabled = true
-                    cameraController.delegate = self
-                    self.present(cameraController, animated: true)
+                       self.presentCameraCalibration(cameraController)
                    }
-               }
-           return
+                }
+                return
            case .denied: // The user has previously denied access.
             NSLog("denied")
                return
@@ -86,6 +91,10 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
         redGainTextField.delegate = self
         blueGainTextField.delegate = self
         greenGainTextField.delegate = self
+        cameraSelector.delegate = self
+        cameraSelector.dataSource = self
+        cameraSelector.selectRow(self.userDefaults.integer(forKey: "camera_index"), inComponent: 0, animated: false)
+
         AppUtility.lockOrientation(.portrait)
     }
     
@@ -135,6 +144,9 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
             self.userDefaults.set(green, forKey: "green_gain")
         }
         
+        let cameraIndex = cameraSelector.selectedRow(inComponent: 0)
+        self.userDefaults.set(cameraIndex, forKey: "camera_index")
+        
         self.dismiss(animated: true)
     }
     
@@ -165,6 +177,18 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
         greenGainTextField.text = self.userDefaults.string(forKey: "green_gain")
     }
     
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        AppUtility.collectAvailableCameras().count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return AppUtility.collectAvailableCameras()[row].0
+    }
+    
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         guard let myURL = urls.first else {
             return
@@ -178,6 +202,7 @@ class SettingsController: UIViewController, UITextFieldDelegate, CameraControlle
                    ModelUtility.registerModel(userDefaults: self.userDefaults, modelDetails: modelDetails)
                     if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
                         currentAppDelegate.resetVisionModule();
+                        currentAppDelegate.getSpeciesDatabase()?.loadDatabase();
                     }
                     
                     DispatchQueue.main.async {

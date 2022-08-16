@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		26590E75F62383A8296A01FF /* Pods_XyloPhoneIOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B77E3348B57ED891DB3F22 /* Pods_XyloPhoneIOS.framework */; };
-		6046C082279400C2000BF5CC /* species_database.json in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07D279400C2000BF5CC /* species_database.json */; };
-		6046C08F27952F4E000BF5CC /* model.json in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07A279400C2000BF5CC /* model.json */; };
-		6046C09127952F4E000BF5CC /* model.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6046C07C279400C2000BF5CC /* model.txt */; };
 		605F28B926CDEAC900CAC0EC /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605F28B826CDEAC900CAC0EC /* CameraController.swift */; };
 		60705FDD26C9C27A00C821B3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FDC26C9C27A00C821B3 /* AppDelegate.swift */; };
 		60705FDF26C9C27A00C821B3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60705FDE26C9C27A00C821B3 /* SceneDelegate.swift */; };
@@ -37,12 +34,12 @@
 		65370CE228869988007037A9 /* ZIPFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65370CE128869988007037A9 /* ZIPFoundation.framework */; };
 		653D8B7527F0B88E000F4F9B /* DetailsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653D8B7427F0B88E000F4F9B /* DetailsController.swift */; };
 		6568AD1527F9596800550FCE /* phone_settings.json in Resources */ = {isa = PBXBuildFile; fileRef = 6568AD1427F9596800550FCE /* phone_settings.json */; };
-		6568AD1827F95BFB00550FCE /* class_labels.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6568AD1627F95BFB00550FCE /* class_labels.txt */; };
 		6568AD1B27FADEA100550FCE /* TopkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6568AD1A27FADEA000550FCE /* TopkCell.swift */; };
 		6589ECA627E81B9800CC1689 /* InferenceLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6589ECA527E81B9800CC1689 /* InferenceLogCell.swift */; };
 		65A22FD328018AAB00965BC3 /* ModelInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A22FD228018AAB00965BC3 /* ModelInstaller.swift */; };
 		65A22FD52801977800965BC3 /* model.zip in Resources */ = {isa = PBXBuildFile; fileRef = 65A22FD42801977800965BC3 /* model.zip */; };
 		65A22FD7280199D200965BC3 /* ExportUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65A22FD6280199D200965BC3 /* ExportUtil.swift */; };
+		65F4584028AB79C3005D9DD4 /* SpeciesUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F4583F28AB79C3005D9DD4 /* SpeciesUtil.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,9 +62,6 @@
 /* Begin PBXFileReference section */
 		00B77E3348B57ED891DB3F22 /* Pods_XyloPhoneIOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XyloPhoneIOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		359EED8FAAD5BC9596C3739D /* Pods-XyloPhoneIOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XyloPhoneIOS.release.xcconfig"; path = "Target Support Files/Pods-XyloPhoneIOS/Pods-XyloPhoneIOS.release.xcconfig"; sourceTree = "<group>"; };
-		6046C07A279400C2000BF5CC /* model.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = model.json; sourceTree = "<group>"; };
-		6046C07C279400C2000BF5CC /* model.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = model.txt; sourceTree = "<group>"; };
-		6046C07D279400C2000BF5CC /* species_database.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = species_database.json; sourceTree = "<group>"; };
 		605F28B826CDEAC900CAC0EC /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
 		60705FD926C9C27A00C821B3 /* XyloPhoneIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = XyloPhoneIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60705FDC26C9C27A00C821B3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -103,12 +97,12 @@
 		65370CE128869988007037A9 /* ZIPFoundation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ZIPFoundation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		653D8B7427F0B88E000F4F9B /* DetailsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsController.swift; sourceTree = "<group>"; };
 		6568AD1427F9596800550FCE /* phone_settings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = phone_settings.json; sourceTree = "<group>"; };
-		6568AD1627F95BFB00550FCE /* class_labels.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = class_labels.txt; sourceTree = "<group>"; };
 		6568AD1A27FADEA000550FCE /* TopkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopkCell.swift; sourceTree = "<group>"; };
 		6589ECA527E81B9800CC1689 /* InferenceLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InferenceLogCell.swift; sourceTree = "<group>"; };
 		65A22FD228018AAB00965BC3 /* ModelInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelInstaller.swift; sourceTree = "<group>"; };
 		65A22FD42801977800965BC3 /* model.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = model.zip; sourceTree = "<group>"; };
 		65A22FD6280199D200965BC3 /* ExportUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportUtil.swift; sourceTree = "<group>"; };
+		65F4583F28AB79C3005D9DD4 /* SpeciesUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeciesUtil.swift; sourceTree = "<group>"; };
 		B2DEC556A23CBD92ECDCCD2F /* Pods-XyloPhoneIOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XyloPhoneIOS.debug.xcconfig"; path = "Target Support Files/Pods-XyloPhoneIOS/Pods-XyloPhoneIOS.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -152,10 +146,6 @@
 			isa = PBXGroup;
 			children = (
 				65A22FD42801977800965BC3 /* model.zip */,
-				6568AD1627F95BFB00550FCE /* class_labels.txt */,
-				6046C07A279400C2000BF5CC /* model.json */,
-				6046C07C279400C2000BF5CC /* model.txt */,
-				6046C07D279400C2000BF5CC /* species_database.json */,
 				6568AD1427F9596800550FCE /* phone_settings.json */,
 			);
 			name = model;
@@ -277,6 +267,7 @@
 				60D45AD627A9428100D69295 /* AppUtil.swift */,
 				65A22FD228018AAB00965BC3 /* ModelInstaller.swift */,
 				65A22FD6280199D200965BC3 /* ExportUtil.swift */,
+				65F4583F28AB79C3005D9DD4 /* SpeciesUtil.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -387,15 +378,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6046C08F27952F4E000BF5CC /* model.json in Resources */,
-				6046C09127952F4E000BF5CC /* model.txt in Resources */,
-				6568AD1827F95BFB00550FCE /* class_labels.txt in Resources */,
 				60A5B514278595B700EBEE7A /* Cartfile in Resources */,
 				60705FEC26C9C27B00C821B3 /* LaunchScreen.storyboard in Resources */,
 				60705FE926C9C27B00C821B3 /* Assets.xcassets in Resources */,
 				6568AD1527F9596800550FCE /* phone_settings.json in Resources */,
 				65A22FD52801977800965BC3 /* model.zip in Resources */,
-				6046C082279400C2000BF5CC /* species_database.json in Resources */,
 				60705FE426C9C27A00C821B3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -490,6 +477,7 @@
 				60D45AD727A9428100D69295 /* AppUtil.swift in Sources */,
 				6070FD9727917C7700C923B0 /* XyloPhoneIOS.xcdatamodeld in Sources */,
 				60A7318526FCB2150096F840 /* PhotoCaptureProcessor.swift in Sources */,
+				65F4584028AB79C3005D9DD4 /* SpeciesUtil.swift in Sources */,
 				65A22FD7280199D200965BC3 /* ExportUtil.swift in Sources */,
 				60705FDF26C9C27A00C821B3 /* SceneDelegate.swift in Sources */,
 				65A22FD328018AAB00965BC3 /* ModelInstaller.swift in Sources */,
@@ -684,7 +672,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.fao.xylophone.philwoodid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "${TARGET_NAME}";
 				SWIFT_OBJC_BRIDGING_HEADER = "XyloPhoneIOS/TorchBridge/PyTorchDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -706,7 +694,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.fao.xylophone.philwoodid;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "${TARGET_NAME}";
 				SWIFT_OBJC_BRIDGING_HEADER = "XyloPhoneIOS/TorchBridge/PyTorchDemo-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
