@@ -23,9 +23,9 @@ class CameraController: UIViewController, AVCaptureVideoDataOutputSampleBufferDe
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.previewView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.width)
-        self.previewView.bringSubviewToFront(CaptureButton)
-        self.previewView.contentMode = .scaleAspectFill
+//        self.previewView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.width)
+//        self.previewView.bringSubviewToFront(CaptureButton)
+//        self.previewView.contentMode = .scaleAspectFill
         NSLog("calibration is \(calibrationModeEnabled)")
         if !calibrationModeEnabled {
             

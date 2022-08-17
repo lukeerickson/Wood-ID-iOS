@@ -33,6 +33,11 @@ class SpeciesUtil {
         return classLabel
     }
     
+    public func resolve(classLabel: String) -> Species? {
+        let key = classLabel.lowercased().replacingOccurrences(of: " ", with: "_")
+        return database[key]
+    }
+    
     private func getSpeciesDatabase(userDefaults: UserDefaults) -> [String: Species] {
         if let filePath = userDefaults.object(forKey: "currentModel") {
             NSLog("loading extracted model at \(filePath)")

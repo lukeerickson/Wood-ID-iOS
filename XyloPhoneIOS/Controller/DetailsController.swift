@@ -15,11 +15,31 @@ struct TopKPair: Decodable, Encodable {
 
 class DetailsController: UIViewController {
     @IBOutlet weak var sampleImage: UIImageView!
+    @IBOutlet weak var sampleCommonName: UILabel!
     @IBOutlet weak var sampleLabel: UILabel!
     @IBOutlet weak var topkContainer: UITableView!
     @IBOutlet weak var timeStampLabel: UILabel!
     weak open var inferenceLog: (InferenceLogEntity)?
+    var speciesDatabase: SpeciesUtil?
     var topKArr: [TopKPair] = []
+    
+    fileprivate func loadSpeciesDetails() {
+        DispatchQueue.main.async {
+            if let inferenceLog = self.inferenceLog {
+                if let species = self.speciesDatabase?.resolve(classLabel: inferenceLog.classLabel!) {
+                    if let commonName = species.other_names.first {
+                        self.sampleCommonName.text = commonName
+                        if (inferenceLog.classLabel != commonName ) {
+                            self.sampleLabel.text = species.scientific_name
+                            self.sampleLabel.isHidden = false
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,11 +48,23 @@ class DetailsController: UIViewController {
         }
         topkContainer.delegate = self
         topkContainer.dataSource = self
-        sampleLabel.text = inferenceLog?.classLabel
+        sampleCommonName.text = inferenceLog?.classLabel
+        sampleLabel.isHidden = true
         if let timestamp = inferenceLog?.timestamp {
             let dateFormatterGet = DateFormatter()
             dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
             timeStampLabel.text = dateFormatterGet.string(from: timestamp)
+        }
+        
+        if (speciesDatabase == nil) {
+            if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
+                DispatchQueue.global().async {
+                    self.speciesDatabase = currentAppDelegate.getSpeciesDatabase();
+                    self.loadSpeciesDetails()
+                }
+            }
+        } else {
+            loadSpeciesDetails()
         }
     }
 

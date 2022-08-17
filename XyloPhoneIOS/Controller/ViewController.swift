@@ -47,8 +47,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Do any additional setup after loading the view.
         
         if (speciesDatabase == nil) {
-            DispatchQueue.global().async {
-                if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
+            if let currentAppDelegate = UIApplication.shared.delegate as! AppDelegate? {
+                DispatchQueue.global().async {
                     self.speciesDatabase = currentAppDelegate.getSpeciesDatabase();
                     DispatchQueue.main.async {
                         self.inferenceLogs = self.loadInferenceLogs()
